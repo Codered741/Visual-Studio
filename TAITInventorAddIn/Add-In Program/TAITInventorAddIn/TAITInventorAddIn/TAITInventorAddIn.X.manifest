@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+
+  <assemblyIdentity name="TAITInventorAddIn" version="1.0.0.0"></assemblyIdentity>
+
+  <clrClass clsid="{e731e5c3-c035-48de-9158-f8a5510e11b6}" progid="TAITInventorAddIn.StandardAddInServer" threadingModel="Both" name="TAITInventorAddIn.TAITInventorAddIn.StandardAddInServer" runtimeVersion=""></clrClass>
+
+  <file name="TAITInventorAddIn.dll" hashalg="SHA1"></file>
+
+</assembly>

@@ -1,0 +1,29 @@
+*
+*The list below is formatted in a specific order. If you are adding or removing material grades please obey the following template so the program can interpret your entries without error.
+*[MATERIAL]|[SHAPE, SHAPE, SHAPE, ETC]|[GRADE]|[ANY SPECIAL NOTES ON GRADE SELECTED]
+*Each line represents a material grade.
+*Notes lines begin with "*" All lines without an asterisk(*) will be read.
+*
+Stainless Steel|Angle, Channel, Wide Flange Beam, Plate, Rect Tube, Round Tube, Pipe|304|Typical stainless steel grade. 
+Stainless Steel|Angle, Channel, Wide Flange Beam, Plate, Rect Tube, Round Tube, Pipe|304L|For welding applications.
+Stainless Steel|Bar, Round|440C|Typical stainless shafting material.
+Stainless Steel|Bar, Round, Plate|17-4 H1150|Typical Stainless high strength shafting material.								
+Stainless Steel|Bar, Round|17-4 H900|
+Carbon Steel|Angle, Channel, S-Shape, Bar, Round, Plate|ASTM A36|
+Carbon Steel|Bar, Round|A4340 Q&T|
+Carbon Steel|Pipe|ASTM A53 Gr.B|
+Carbon Steel|Round Tube|ASTM A513 DOM Gr.1020|
+Carbon Steel|Round Tube|ASTM A513 DOM Gr.1026|
+Carbon Steel|Round Tube|ASTM A513 DOM Gr.4140|
+Carbon Steel|Plate|ASTM A514|
+Carbon Steel|Round Tube, Rect Tube|ASTM A500 Gr.B|
+Carbon Steel|Bar, Round, Plate|ASTM A572 Gr.50|
+Carbon Steel|Bar, Round, Plate|ASTM A572 Gr.65|
+Carbon Steel|Bar, Round, Plate|ASTM A529 Gr.50|
+Carbon Steel|Bar, Round, Plate|ASTM A529 Gr.55|
+Carbon Steel|Wide Flange Beam|ASTM A992|
+Aluminum|Angle, Channel, Wide Flange Beam, Plate, Rect Tube, Round Tube, Pipe, Bar, Round|6061-T6|
+Aluminum|Plate|5052-H32|Used for formed plate. Significantly weaker than 6061-T6, especially when welded.
+UHMW|Plate, Bar, Round|White|
+UHMW|Plate, Bar, Round|Black|
+UHMW|Plate, Bar, Round|Blue|

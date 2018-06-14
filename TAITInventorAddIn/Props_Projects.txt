@@ -1,0 +1,8 @@
+*
+*The list below is formatted in a specific order. If you are adding or removing projects please obey the following template so the program can interpret your entries without error.
+*[PROJECT]|[ELEMENTS]
+*Each line represents a project.
+*Notes lines begin with "*" All lines without an asterisk(*) will be read.
+*
+UNIVERSAL MARIO KART|SIDE THWOMP,AIRSHIP PROPELLER,CHANDELEIR,CHAIN CHOMP,SMALL PIRANHA PLANT,HOVERING PROPELLER,LAKITU MARQUEE,BOUNCE PAD W/PROPS
+DISNEY PROJECT KAPPA|CENTER ICON,SWING ARMS
