@@ -12,15 +12,17 @@ Namespace TAITInventorAddIn
             MyBase.New
             InitializeComponent()
             Dim uiMgr As UserInterfaceManager = app.UserInterfaceManager
-            Dim myDockableWindow As DockableWindow = uiMgr.DockableWindows.Add(addInCLS, "MyWindow", "TAIT PI Test Form")
+            Dim myDockableWindow As DockableWindow = uiMgr.DockableWindows.Add(addInCLS, "MyWindow", "TAIT PI Test Dockform")
             myDockableWindow.AddChild(Me.Handle)
 
             ' Default docking state
             If Not myDockableWindow.IsCustomized Then
                 myDockableWindow.DockingState = DockingStateEnum.kFloat
+                'myDockableWindow.DockingState = DockingStateEnum.kDockTop
+                'myDockableWindow.DisabledDockingStates = DockingStateEnum.kDockLeft + DockingStateEnum.kDockRight
                 myDockableWindow.Move(25, 25, myDockableWindow.Height, myDockableWindow.Width)
             End If
-            'Me.Visible = True
+            Me.Visible = True
             myDockableWindow.Visible = True
 
         End Sub
@@ -40,37 +42,34 @@ Namespace TAITInventorAddIn
         'Required by the Windows Form Designer
         Private components As System.ComponentModel.IContainer
 
-        'NOTE: The following procedure is required by the Windows Form Designer
-        'It can be modified using the Windows Form Designer. 
-        'Do not modify it using the code editor.
-        <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-            Me.ElementHost2 = New System.Windows.Forms.Integration.ElementHost()
+        Private Sub InitializeComponent()
+            Me.ElementHost1 = New System.Windows.Forms.Integration.ElementHost()
+            Me.UserControlG1 = New WpfApp1.UserControlG()
             Me.SuspendLayout()
             '
-            'ElementHost2
+            'ElementHost1
             '
-            Me.ElementHost2.Dock = System.Windows.Forms.DockStyle.Fill
-            Me.ElementHost2.Location = New System.Drawing.Point(0, 0)
-            Me.ElementHost2.Name = "ElementHost2"
-            Me.ElementHost2.Size = New System.Drawing.Size(248, 155)
-            Me.ElementHost2.TabIndex = 3
-            Me.ElementHost2.Text = "ElementHost2"
-            Me.ElementHost2.Child = Nothing
+            Me.ElementHost1.Dock = System.Windows.Forms.DockStyle.Fill
+            Me.ElementHost1.Location = New System.Drawing.Point(0, 0)
+            Me.ElementHost1.Name = "ElementHost1"
+            Me.ElementHost1.Size = New System.Drawing.Size(300, 158)
+            Me.ElementHost1.TabIndex = 0
+            Me.ElementHost1.Text = "ElementHost1"
+            Me.ElementHost1.Child = Me.UserControlG1
             '
             'DockForm
             '
             Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
             Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-            Me.ClientSize = New System.Drawing.Size(248, 155)
-            Me.Controls.Add(Me.ElementHost2)
+            Me.AutoSize = True
+            Me.ClientSize = New System.Drawing.Size(300, 158)
+            Me.Controls.Add(Me.ElementHost1)
             Me.Name = "DockForm"
-            Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-            Me.Text = "Form1"
             Me.ResumeLayout(False)
 
         End Sub
 
-        Friend WithEvents ElementHost2 As Integration.ElementHost
-
+        Friend WithEvents ElementHost1 As Integration.ElementHost
+        Friend UserControlG1 As WpfApp1.UserControlG
     End Class
 End Namespace

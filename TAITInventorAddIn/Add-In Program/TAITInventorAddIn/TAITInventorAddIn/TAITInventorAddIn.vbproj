@@ -383,6 +383,12 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WpfApp1\WpfApp1.vbproj">
+      <Project>{4594A99C-5595-4003-A7B2-A7F9D8AD858C}</Project>
+      <Name>WpfApp1</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PreBuildEvent>

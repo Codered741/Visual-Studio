@@ -1045,8 +1045,8 @@ NXT:
         Private Sub BtnDockableForm_Clicked(ByVal context As NameValueMap) Handles BtnDockableForm.OnExecute
             MsgBox("Opening Dockable form...")
             Dim f As DockForm = New DockForm(g_inventorApplication, AddInClientID)
-            'f.Visible = False
             f.ShowDialog()
+            MsgBox("Dockable form opened.")
         End Sub
 
 #End Region
