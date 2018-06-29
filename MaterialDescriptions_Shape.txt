@@ -1,9 +1,0 @@
-Angle
-Channel
-Wide Flange Beam
-Plate
-Bar
-Round
-Round Tube
-Rect Tube
-Pipe
