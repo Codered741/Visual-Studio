@@ -9,7 +9,6 @@ Namespace TAITInventorAddIn
 
         Public Sub New(app As Inventor.Application, addInCLS As String)
 
-            MyBase.New
             InitializeComponent()
             Dim uiMgr As UserInterfaceManager = app.UserInterfaceManager
             Dim myDockableWindow As DockableWindow = uiMgr.DockableWindows.Add(addInCLS, "MyWindow", "TAIT PI Test Dockform")

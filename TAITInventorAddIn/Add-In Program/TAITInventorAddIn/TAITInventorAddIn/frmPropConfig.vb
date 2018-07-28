@@ -354,9 +354,17 @@ nOBJ:
             propDesigner = StdPropSet.Item("Designer")
             propDesigner.Value = cmbDesigners.Text.Substring(0, 3)
         Catch ex As Exception
-            Dim propDesigner As Inventor.Property
-            propDesigner = StdPropSet.Add(cmbDesigners.Text.Substring(0, 3), "Designer")
+            If String.IsNullOrEmpty(cmbDesigners.Text) Then
+                Dim propDesigner As Inventor.Property
+                propDesigner = StdPropSet.Item("Designer")
+                propDesigner.Value = " "
+            Else
+                Dim propDesigner As Inventor.Property
+                propDesigner = StdPropSet.Item("Designer")
+                propDesigner.Value = cmbDesigners.Text
+            End If
         End Try
+
         Try
             Dim propDesignDate As Inventor.Property
             propDesignDate = StdPropSet.Item("Creation Time")
@@ -371,8 +379,15 @@ nOBJ:
             propChecker = StdPropSet.Item("Checked By")
             propChecker.Value = cmbCheckers.Text.Substring(0, 3)
         Catch ex As Exception
-            Dim propChecker As Inventor.Property
-            propChecker = StdPropSet.Add(cmbCheckers.Text.Substring(0, 3), "Checked By")
+            If String.IsNullOrEmpty(cmbCheckers.Text) Then
+                Dim propChecker As Inventor.Property
+                propChecker = StdPropSet.Item("Checked By")
+                propChecker.Value = " "
+            Else
+                Dim propChecker As Inventor.Property
+                propChecker = StdPropSet.Item("Checked By")
+                propChecker.Value = cmbCheckers.Text
+            End If
         End Try
         Try
             Dim propCheckedDate As Inventor.Property
@@ -388,8 +403,15 @@ nOBJ:
             propApprover = StdPropSet.Item("Engr Approved By")
             propApprover.Value = cmbApprovers.Text.Substring(0, 3)
         Catch ex As Exception
-            Dim propApprover As Inventor.Property
-            propApprover = StdPropSet.Add(cmbApprovers.Text.Substring(0, 3), "Engr Approved By")
+            If String.IsNullOrEmpty(cmbDesigners.Text) Then
+                Dim propApprover As Inventor.Property
+                propApprover = StdPropSet.Item("Engr Approved By")
+                propApprover.Value = " "
+            Else
+                Dim propApprover As Inventor.Property
+                propApprover = StdPropSet.Item("Engr Approved By")
+                propApprover.Value = cmbApprovers.Text
+            End If
         End Try
         Try
             Dim propApprovedDate As Inventor.Property

@@ -12,8 +12,8 @@ Imports Microsoft.Office.Core
 Imports Microsoft.Win32
 
 Namespace TAITInventorAddIn
-    <ProgIdAttribute("TAITInventorAddIn.StandardAddInServer"), _
-    GuidAttribute("e731e5c3-c035-48de-9158-f8a5510e11b6")> _
+    <ProgIdAttribute("TAITInventorAddIn.StandardAddInServer"),
+    GuidAttribute("e731e5c3-c035-48de-9158-f8a5510e11b6")>
     Public Class StandardAddInServer
         Implements Inventor.ApplicationAddInServer
 
@@ -32,6 +32,7 @@ Namespace TAITInventorAddIn
         Public WithEvents BtnStdFasteners As ButtonDefinition
         Public WithEvents BtnTestVaultConn As ButtonDefinition
         Public WithEvents BtnKAPPAApplyDwgTemplate As ButtonDefinition
+        Public WithEvents BtnFastenerEdgeDistRef As ButtonDefinition
         'The following button definitions are for testing purposes only
         Public ctrlDefs As ObjectCollection
         Public WithEvents _ctrlDef1 As ButtonDefinition
@@ -123,6 +124,11 @@ Namespace TAITInventorAddIn
             Dim smallStdFastenersicon As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(My.Resources._3536___bolt_512_Ifz_icon)
             BtnStdFasteners = controlDefs.AddButtonDefinition("Standard Fasteners", "TAITPI_STD_FASTENERS", CommandTypesEnum.kShapeEditCmdType, AddInClientID, "Opens reference for TAIT PI Standard Fasteners.", "Open a reference for TAIT PI Standard Fasteners.", smallStdFastenersicon, largeStdFastenersicon, ButtonDisplayEnum.kAlwaysDisplayText)
 
+            'Create the Fastener Edge Distance Reference button definition.
+            Dim largeEdgeDist As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(My.Resources.sort_2_512_iAs_icon)
+            Dim smallEdgeDist As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(My.Resources.sort_2_512_iAs_icon)
+            BtnFastenerEdgeDistRef = controlDefs.AddButtonDefinition("Fastener Edge" & vbNewLine & "Distances", "TAITPI_STD_EDGE_DIST", CommandTypesEnum.kShapeEditCmdType, AddInClientID, "Opens reference for required fastener edge distances.", "Open a reference for required fastener edge distances.", smallEdgeDist, largeEdgeDist, ButtonDisplayEnum.kAlwaysDisplayText)
+
             'Create the VaultConnStatus button definition.
             Dim largeVaultConnicon As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(My.Resources.connection_318_40172_K0B_icon)
             Dim smallVaultConnicon As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(My.Resources.connection_318_40172_K0B_icon)
@@ -168,6 +174,7 @@ Namespace TAITInventorAddIn
             BtnKAPPAApplyDwgTemplate = Nothing
             BtnStdFasteners = Nothing
             BtnTestVaultConn = Nothing
+            BtnFastenerEdgeDistRef = Nothing
 
             ctrlDefs = Nothing
             _ctrlDef1 = Nothing
@@ -198,7 +205,6 @@ Namespace TAITInventorAddIn
         End Sub
 
 #End Region
-
 #Region "User interface definition"
         ' Sub where the user-interface creation is done.  This is called when
         ' the add-in loaded and also if the user interface is reset.
@@ -281,6 +287,7 @@ Namespace TAITInventorAddIn
             ' Add buttons.
             AsmDesignToolsPanel.CommandControls.AddButton(BtnEngrSpreadsheets, True, True)
             AsmDesignToolsPanel.CommandControls.AddButton(BtnStdFasteners, True, True)
+            AsmDesignToolsPanel.CommandControls.AddButton(BtnFastenerEdgeDistRef, True, True)
 
             ' Create a panel for data processing tools.
             Dim AsmProcessingToolsPanel As RibbonPanel = TAITAsmTab.RibbonPanels.Add("Data Processing Tools", "D_P_PANEL", AddInClientID)
@@ -311,7 +318,6 @@ Namespace TAITInventorAddIn
             DrawingRefsPanel.CommandControls.AddButton(BtnStdFasteners, True, True)
 
         End Sub
-
         Private Sub M_uiEvents_OnResetRibbonInterface(Context As NameValueMap) Handles M_uiEvents.OnResetRibbonInterface
             ' The ribbon was reset, so add back the add-ins user-interface.
             AddToUserInterface()
@@ -404,21 +410,39 @@ SKIP:
 
         End Sub
         Private Sub BtnPrintDrawings_OnExecute(Context As NameValueMap) Handles BtnPrintDrawings.OnExecute
+            Dim printPDF As Boolean
+            Dim printDWG As Boolean
+            Dim printDXF As Boolean
+            Dim canceled As Boolean
 
-            'get user okay
-            If MessageBox.Show("This will create PDF, DWG and DXF files for all of the assembly component drawings." _
-                & vbLf & "This rule expects that the drawing file shares the same name and location as the component in your local _VaultWIP folder." _
-                & vbLf & " " _
-                & vbLf & "Are you sure you want to create PDF and DWG Files for all of the assembly component drawings?", "Batch Print PDF, DWG, and DXF?", MessageBoxButtons.YesNo) = vbNo Then
-                Exit Sub
-            End If
+            'show okay/cancel prompt
+            Using BatchPrintForm As New frmBatchPrint
+                BatchPrintForm.cbPrintPDF.Checked = True
+                BatchPrintForm.cbPrintDWG.Checked = True
+                BatchPrintForm.cbPrintDXF.Checked = True
+
+                BatchPrintForm.ShowDialog()
+
+                printPDF = BatchPrintForm.cbPrintPDF.Checked
+                printDWG = BatchPrintForm.cbPrintDWG.Checked
+                printDXF = BatchPrintForm.cbPrintDXF.Checked
+                canceled = BatchPrintForm.cbCancel.Checked
+            End Using
+
+            'MsgBox("PDF = " & printPDF.ToString & vbNewLine &
+            '       "DWG = " & printDWG.ToString & vbNewLine &
+            '       "DXF = " & printDXF.ToString & vbNewLine &
+            '       "Canceled = " & canceled.ToString)
+
+            'Exit Sub
 
             Dim VaultAddin As Inventor.ApplicationAddIn = g_inventorApplication.ApplicationAddIns.ItemById("{48B682BC-42E6-4953-84C5-3D253B52E77B}")
             VaultAddin.Deactivate()
 
             Dim oDoc As AssemblyDocument
             oDoc = g_inventorApplication.ActiveDocument
-            Dim filename As String = oDoc.DisplayName.Substring(0, oDoc.DisplayName.Length - 4)
+            Dim filepathsplit As String() = oDoc.FullFileName.Split("\")
+            Dim filename As String = filepathsplit(filepathsplit.Length - 1).Substring(0, filepathsplit(filepathsplit.Length - 1).Length - 4)
 
             'Set and then call PDF export engine variables
             Dim PDFAddIn As TranslatorAddIn
@@ -434,6 +458,13 @@ SKIP:
             Dim oDataMediumDWG As DataMedium
             ConfigureDWGAddinSettings(DWGAddIn, oContextDWG, oOptionsDWG, oDataMediumDWG)
 
+            'Set and then call DXF export engine variables
+            Dim DXFAddIn As TranslatorAddIn
+            Dim oContextDXF As TranslationContext
+            Dim oOptionsDXF As NameValueMap
+            Dim oDataMediumDXF As DataMedium
+            ConfigureDXFAddinSettings(DXFAddIn, oContextDXF, oOptionsDXF, oDataMediumDXF)
+
             Dim DesktopPath As String = My.Computer.FileSystem.SpecialDirectories.Desktop
             Dim oFolder As String = DesktopPath & "\" & filename & " - Drawing Files"
 
@@ -446,62 +477,87 @@ SKIP:
             Dim idwPathName As String
             Dim drawingname As String
 
+            'Dim sample1 As String
+            'Dim sample2 As String
+            'Dim sample3 As String
+            'Dim sample4 As String
+            'Dim sample5 As String
+
             For Each oRefDoc In oDoc.AllReferencedDocuments
                 idwPathName = Left(oRefDoc.FullDocumentName, Len(oRefDoc.FullDocumentName) - 3) & "dwg"
-                drawingname = oRefDoc.DisplayName.Substring(0, oRefDoc.DisplayName.Length - 4)
+                Dim drawingpathsplit As String() = oRefDoc.FullFileName.Split("\")
+                drawingname = drawingpathsplit(drawingpathsplit.Length - 1).Substring(0, drawingpathsplit(drawingpathsplit.Length - 1).Length - 4)
+
+                'sample1 = oRefDoc.DisplayName
+                'sample2 = oRefDoc.FullFileName
+                'sample3 = oRefDoc.InternalName
+                'sample4 = oRefDoc.FullDocumentName
+                'sample5 = drawingname
+                'MsgBox("displayname = " & sample1 & vbNewLine &
+                '       "fullfilename = " & sample2 & vbNewLine &
+                '       "internalname = " & sample3 & vbNewLine &
+                '       "fulldocname = " & sample4 & vbNewLine &
+                '       "original name = " & sample5)
+                'GoTo NXT
 
                 If (System.IO.File.Exists(idwPathName)) Then
                     Dim oDrawDoc As DrawingDocument
                     oDrawDoc = g_inventorApplication.Documents.Open(idwPathName, True)
                     Try
                         If oDrawDoc.Sheets.Count > 1 Then
-                            For Each sht As Sheet In oDrawDoc.Sheets
-                                sht.Activate()
+                            If printPDF = True Then
+                                For Each sht As Sheet In oDrawDoc.Sheets
+                                    sht.Activate()
+                                    g_inventorApplication.CommandManager.ControlDefinitions.Item("AppZoomallCmd").Execute()
+                                    sht.Update()
+                                    'Export PDF
+                                    If PDFAddIn.HasSaveCopyAsOptions(oDrawDoc, oContextPDF, oOptionsPDF) Then
+                                        oDataMediumPDF.FileName = oFolder & "\" & drawingname & "_Sheet " & sht._DisplayName.Substring(sht._DisplayName.Length - 1, 1) & ".pdf"
+                                        Call PDFAddIn.SaveCopyAs(oDrawDoc, oContextPDF, oOptionsPDF, oDataMediumPDF)
+                                    End If
+                                Next
+                            End If
+                            If printDWG = True Then
+                                'Export DWG
+                                If DWGAddIn.HasSaveCopyAsOptions(oDrawDoc, oContextDWG, oOptionsDWG) Then
+                                    oOptionsDWG.Value("Export_Acad_IniFile") = "Z:\PERMANENT INSTALL\Programming\TAIT PI Inventor Add-in\exportdwg.ini"
+                                    oDataMediumDWG.FileName = oFolder & "\" & drawingname & ".dwg"
+                                    Call DWGAddIn.SaveCopyAs(oDrawDoc, oContextDWG, oOptionsDWG, oDataMediumDWG)
+                                End If
+                            End If
+                            If printDXF = True Then
+                                'Export DXF
+                                If DXFAddIn.HasSaveCopyAsOptions(oDrawDoc, oContextDXF, oOptionsDXF) Then
+                                    oOptionsDXF.Value("Export_Acad_IniFile") = "Z:\PERMANENT INSTALL\Programming\TAIT PI Inventor Add-in\exportdxf.ini"
+                                    oDataMediumDXF.FileName = oFolder & "\" & drawingname & ".dxf"
+                                    Call DXFAddIn.SaveCopyAs(oDrawDoc, oContextDXF, oOptionsDXF, oDataMediumDXF)
+                                End If
+                            End If
+                        Else
+                            If printPDF = True Then
                                 g_inventorApplication.CommandManager.ControlDefinitions.Item("AppZoomallCmd").Execute()
-                                sht.Update()
                                 'Export PDF
                                 If PDFAddIn.HasSaveCopyAsOptions(oDrawDoc, oContextPDF, oOptionsPDF) Then
-                                    oDataMediumPDF.FileName = oFolder & "\" & drawingname & "_Sheet " & sht._DisplayName.Substring(sht._DisplayName.Length - 1, 1) & ".pdf"
+                                    oDataMediumPDF.FileName = oFolder & "\" & drawingname & ".pdf"
                                     Call PDFAddIn.SaveCopyAs(oDrawDoc, oContextPDF, oOptionsPDF, oDataMediumPDF)
                                 End If
-                            Next
-                            'Export DWG
-                            If DWGAddIn.HasSaveCopyAsOptions(oDrawDoc, oContextDWG, oOptionsDWG) Then
-                                oOptionsDWG.Value("Export_Acad_IniFile") = "C:\Users\Public\Documents\Autodesk\Inventor 2017\Design Data\DWG-DXF\exportdwg.ini"
-                                oDataMediumDWG.FileName = oFolder & "\" & drawingname & ".dwg"
-                                'oDataMediumDWG.FileName = oFolder & "\" & drawingname & "_Sheet " & sht._DisplayName.Substring(sht._DisplayName.Length - 1, 1) & ".dwg"
-                                Call DWGAddIn.SaveCopyAs(oDrawDoc, oContextDWG, oOptionsDWG, oDataMediumDWG)
                             End If
-                            'Export DXF
-                            For Each sht As Sheet In oDrawDoc.Sheets
-                                sht.Activate()
-                                g_inventorApplication.CommandManager.ControlDefinitions.Item("AppZoomallCmd").Execute()
-                                sht.Update()
-                                Try
-                                    Call oDrawDoc.SaveAs(oFolder & "\" & drawingname & "_Sheet " & sht._DisplayName.Substring(sht._DisplayName.Length - 1, 1) & ".dxf", True)
-                                Catch ex As Exception
-                                    MsgBox("Could not print " & drawingname & "_Sheet " & sht._DisplayName.Substring(sht._DisplayName.Length - 1, 1) & " to dxf")
-                                End Try
-                            Next
-                        Else
-                            g_inventorApplication.CommandManager.ControlDefinitions.Item("AppZoomallCmd").Execute()
-                            'Export PDF
-                            If PDFAddIn.HasSaveCopyAsOptions(oDrawDoc, oContextPDF, oOptionsPDF) Then
-                                oDataMediumPDF.FileName = oFolder & "\" & drawingname & ".pdf"
-                                Call PDFAddIn.SaveCopyAs(oDrawDoc, oContextPDF, oOptionsPDF, oDataMediumPDF)
+                            If printDWG = True Then
+                                'Export DWG
+                                If DWGAddIn.HasSaveCopyAsOptions(oDrawDoc, oContextDWG, oOptionsDWG) Then
+                                    oOptionsDWG.Value("Export_Acad_IniFile") = "Z:\PERMANENT INSTALL\Programming\TAIT PI Inventor Add-in\exportdwg.ini"
+                                    oDataMediumDWG.FileName = oFolder & "\" & drawingname & ".dwg"
+                                    Call DWGAddIn.SaveCopyAs(oDrawDoc, oContextDWG, oOptionsDWG, oDataMediumDWG)
+                                End If
                             End If
-                            'Export DWG
-                            If DWGAddIn.HasSaveCopyAsOptions(oDrawDoc, oContextDWG, oOptionsDWG) Then
-                                oOptionsDWG.Value("Export_Acad_IniFile") = "C:\Users\Public\Documents\Autodesk\Inventor 2017\Design Data\DWG-DXF\exportdwg.ini"
-                                oDataMediumDWG.FileName = oFolder & "\" & drawingname & ".dwg"
-                                Call DWGAddIn.SaveCopyAs(oDrawDoc, oContextDWG, oOptionsDWG, oDataMediumDWG)
+                            If printDXF = True Then
+                                'Export DXF
+                                If DXFAddIn.HasSaveCopyAsOptions(oDrawDoc, oContextDXF, oOptionsDXF) Then
+                                    oOptionsDXF.Value("Export_Acad_IniFile") = "Z:\PERMANENT INSTALL\Programming\TAIT PI Inventor Add-in\exportdxf.ini"
+                                    oDataMediumDXF.FileName = oFolder & "\" & drawingname & ".dxf"
+                                    Call DXFAddIn.SaveCopyAs(oDrawDoc, oContextDXF, oOptionsDXF, oDataMediumDXF)
+                                End If
                             End If
-                            'Export DXF
-                            Try
-                                Call oDrawDoc.SaveAs(oFolder & "\" & drawingname & ".dxf", True)
-                            Catch ex As Exception
-                                MsgBox("Could not print " & drawingname & " to dxf")
-                            End Try
                         End If
 
                     Catch ex As Exception
@@ -511,6 +567,7 @@ SKIP:
                 Else
                     'MsgBox("Error finding drawing for" & drawingname)
                 End If
+                'NXT:
             Next
             '- - - - - - - - - - - - -
             '- - - - - - - - - - - - -Top Level Drawing - - - - - - - - - - - -
@@ -520,62 +577,68 @@ SKIP:
             If (System.IO.File.Exists(asmdrawingPathName)) Then
                 Dim oAsmDrawingDoc As DrawingDocument
                 oAsmDrawingDoc = g_inventorApplication.Documents.Open(g_inventorApplication.ActiveDocument.FullFileName.Substring(0, g_inventorApplication.ActiveDocument.FullFileName.Length - 3) & "dwg", True)
-                oAsmDrawingName = oAsmDrawingDoc.DisplayName.Substring(0, oAsmDrawingDoc.DisplayName.Length - 4)
+                Dim Asmdrawingpathsplit As String() = oAsmDrawingDoc.FullFileName.Split("\")
+                oAsmDrawingName = Asmdrawingpathsplit(Asmdrawingpathsplit.Length - 1).Substring(0, Asmdrawingpathsplit(Asmdrawingpathsplit.Length - 1).Length - 4)
 
                 Try
                     If oAsmDrawingDoc.Sheets.Count > 1 Then
-                        For Each sht As Sheet In oAsmDrawingDoc.Sheets
-                            sht.Activate()
-                            g_inventorApplication.CommandManager.ControlDefinitions.Item("AppZoomallCmd").Execute()
-                            sht.Update()
-                            'Export PDF
-                            'Old method = Call oAsmDrawingDoc.SaveAs(oFolder & "\" & oAsmDrawingName & "_Sheet " & sht._DisplayName.Substring(sht._DisplayName.Length - 1, 1) & ".pdf", True)
-                            If PDFAddIn.HasSaveCopyAsOptions(oAsmDrawingDoc, oContextPDF, oOptionsPDF) Then
-                                oDataMediumPDF.FileName = oFolder & "\" & oAsmDrawingName & "_Sheet " & sht._DisplayName.Substring(sht._DisplayName.Length - 1, 1) & ".pdf"
-                                PDFAddIn.SaveCopyAs(oAsmDrawingDoc, oContextPDF, oOptionsPDF, oDataMediumPDF)
-                            End If
-                        Next
-                        'Export DWG
-                        If DWGAddIn.HasSaveCopyAsOptions(oAsmDrawingDoc, oContextDWG, oOptionsDWG) Then
-                            oOptionsDWG.Value("Export_Acad_IniFile") = "C:\Users\Public\Documents\Autodesk\Inventor 2017\Design Data\DWG-DXF\exportdwg.ini"
-                            'oDataMediumDWG.FileName = oFolder & "\" & oAsmDrawingName & "_Sheet " & sht._DisplayName.Substring(sht._DisplayName.Length - 1, 1) & ".dwg"
-                            oDataMediumDWG.FileName = oFolder & "\" & oAsmDrawingName & ".dwg"
-                            Call DWGAddIn.SaveCopyAs(oAsmDrawingDoc, oContextDWG, oOptionsDWG, oDataMediumDWG)
+                        If printPDF = True Then
+                            For Each sht As Sheet In oAsmDrawingDoc.Sheets
+                                sht.Activate()
+                                g_inventorApplication.CommandManager.ControlDefinitions.Item("AppZoomallCmd").Execute()
+                                sht.Update()
+                                'Export PDF
+                                'Old method = Call oAsmDrawingDoc.SaveAs(oFolder & "\" & oAsmDrawingName & "_Sheet " & sht._DisplayName.Substring(sht._DisplayName.Length - 1, 1) & ".pdf", True)
+                                If PDFAddIn.HasSaveCopyAsOptions(oAsmDrawingDoc, oContextPDF, oOptionsPDF) Then
+                                    oDataMediumPDF.FileName = oFolder & "\" & oAsmDrawingName & "_Sheet " & sht._DisplayName.Substring(sht._DisplayName.Length - 1, 1) & ".pdf"
+                                    PDFAddIn.SaveCopyAs(oAsmDrawingDoc, oContextPDF, oOptionsPDF, oDataMediumPDF)
+                                End If
+                            Next
                         End If
-                        'Export DXF
-                        For Each sht As Sheet In oAsmDrawingDoc.Sheets
-                            sht.Activate()
-                            g_inventorApplication.CommandManager.ControlDefinitions.Item("AppZoomallCmd").Execute()
-                            sht.Update()
-                            Try
-                                Call oAsmDrawingDoc.SaveAs(oFolder & "\" & oAsmDrawingName & "_Sheet " & sht._DisplayName.Substring(sht._DisplayName.Length - 1, 1) & ".dxf", True)
-                            Catch ex As Exception
-                                MsgBox("Could not print " & oAsmDrawingName & "_Sheet " & sht._DisplayName.Substring(sht._DisplayName.Length - 1, 1) & " to dxf")
-                            End Try
-                        Next
 
+                        If printDWG = True Then
+                            'Export DWG
+                            If DWGAddIn.HasSaveCopyAsOptions(oAsmDrawingDoc, oContextDWG, oOptionsDWG) Then
+                                oOptionsDWG.Value("Export_Acad_IniFile") = "C:\Users\Public\Documents\Autodesk\Inventor 2017\Design Data\DWG-DXF\exportdwg.ini"
+                                'oDataMediumDWG.FileName = oFolder & "\" & oAsmDrawingName & "_Sheet " & sht._DisplayName.Substring(sht._DisplayName.Length - 1, 1) & ".dwg"
+                                oDataMediumDWG.FileName = oFolder & "\" & oAsmDrawingName & ".dwg"
+                                Call DWGAddIn.SaveCopyAs(oAsmDrawingDoc, oContextDWG, oOptionsDWG, oDataMediumDWG)
+                            End If
+                        End If
+                        If printDXF = True Then
+                            'Export DXF
+                            If DXFAddIn.HasSaveCopyAsOptions(oAsmDrawingDoc, oContextDXF, oOptionsDXF) Then
+                                oOptionsDXF.Value("Export_Acad_IniFile") = "Z:\PERMANENT INSTALL\Programming\TAIT PI Inventor Add-in\exportdxf.ini"
+                                oDataMediumDXF.FileName = oFolder & "\" & oAsmDrawingName & ".dxf"
+                                Call DXFAddIn.SaveCopyAs(oAsmDrawingDoc, oContextDXF, oOptionsDXF, oDataMediumDXF)
+                            End If
+                        End If
                     Else
                         g_inventorApplication.CommandManager.ControlDefinitions.Item("AppZoomallCmd").Execute()
-                        'Export PDF
-                        'Old Method = Call oAsmDrawingDoc.SaveAs(oFolder & "\" & oAsmDrawingName & ".pdf", True)
-                        If PDFAddIn.HasSaveCopyAsOptions(oAsmDrawingDoc, oContextPDF, oOptionsPDF) Then
-                            oDataMediumPDF.FileName = oFolder & "\" & oAsmDrawingName & ".pdf"
-                            PDFAddIn.SaveCopyAs(oAsmDrawingDoc, oContextPDF, oOptionsPDF, oDataMediumPDF)
+                        If printPDF = True Then
+                            'Export PDF
+                            If PDFAddIn.HasSaveCopyAsOptions(oAsmDrawingDoc, oContextPDF, oOptionsPDF) Then
+                                oDataMediumPDF.FileName = oFolder & "\" & oAsmDrawingName & ".pdf"
+                                PDFAddIn.SaveCopyAs(oAsmDrawingDoc, oContextPDF, oOptionsPDF, oDataMediumPDF)
 
+                            End If
                         End If
-                        'Export DWG
-                        If DWGAddIn.HasSaveCopyAsOptions(oAsmDrawingDoc, oContextDWG, oOptionsDWG) Then
-                            oOptionsDWG.Value("Export_Acad_IniFile") = "C:\Users\Public\Documents\Autodesk\Inventor 2017\Design Data\DWG-DXF\exportdwg.ini"
-                            oDataMediumDWG.FileName = oFolder & "\" & oAsmDrawingName & ".dwg"
-                            Call DWGAddIn.SaveCopyAs(oAsmDrawingDoc, oContextDWG, oOptionsDWG, oDataMediumDWG)
+                        If printDWG = True Then
+                            'Export DWG
+                            If DWGAddIn.HasSaveCopyAsOptions(oAsmDrawingDoc, oContextDWG, oOptionsDWG) Then
+                                oOptionsDWG.Value("Export_Acad_IniFile") = "C:\Users\Public\Documents\Autodesk\Inventor 2017\Design Data\DWG-DXF\exportdwg.ini"
+                                oDataMediumDWG.FileName = oFolder & "\" & oAsmDrawingName & ".dwg"
+                                Call DWGAddIn.SaveCopyAs(oAsmDrawingDoc, oContextDWG, oOptionsDWG, oDataMediumDWG)
+                            End If
                         End If
-                        'Export DXF
-                        Try
-                            Call oAsmDrawingDoc.SaveAs(oFolder & "\" & oAsmDrawingName & ".dxf", True)
-                        Catch ex As Exception
-                            MsgBox("Could not print " & oAsmDrawingName & " to dxf")
-                        End Try
-
+                        If printDXF = True Then
+                            'Export DXF
+                            If DXFAddIn.HasSaveCopyAsOptions(oAsmDrawingDoc, oContextDXF, oOptionsDXF) Then
+                                oOptionsDXF.Value("Export_Acad_IniFile") = "Z:\PERMANENT INSTALL\Programming\TAIT PI Inventor Add-in\exportdxf.ini"
+                                oDataMediumDXF.FileName = oFolder & "\" & oAsmDrawingName & ".dxf"
+                                Call DXFAddIn.SaveCopyAs(oAsmDrawingDoc, oContextDXF, oOptionsDXF, oDataMediumDXF)
+                            End If
+                        End If
                     End If
 
                 Catch ex As Exception
@@ -617,6 +680,16 @@ SKIP:
 
             oDataMediumDWG = g_inventorApplication.TransientObjects.CreateDataMedium
         End Sub
+        Sub ConfigureDXFAddinSettings(ByRef DXFAddIn As TranslatorAddIn, ByRef oContextDXF As TranslationContext, ByRef oOptionsDXF As NameValueMap, ByRef oDataMediumDXF As DataMedium)
+
+            DXFAddIn = g_inventorApplication.ApplicationAddIns.ItemById("{C24E3AC4-122E-11D5-8E91-0010B541CD80}")
+            oContextDXF = g_inventorApplication.TransientObjects.CreateTranslationContext
+            oContextDXF.Type = IOMechanismEnum.kFileBrowseIOMechanism
+
+            oOptionsDXF = g_inventorApplication.TransientObjects.CreateNameValueMap
+
+            oDataMediumDXF = g_inventorApplication.TransientObjects.CreateDataMedium
+        End Sub
         Private Sub BtnModifyDwgNotes_OnExecute(Context As NameValueMap) Handles BtnModifyDwgNotes.OnExecute
             Dim ModifyNotesForm As New frmModifyDwgNotes 'Launch the frmModifyDwgNotes form when the button is clicked.
             ModifyNotesForm.ShowDialog()
@@ -638,7 +711,7 @@ SKIP:
 
             Dim drawingtreeSS1 As New frmDrawingTreeSplashScreen
             drawingtreeSS1.Label1.Text = "Processing BOM Export..."
-            drawingtreeSS1.ShowDialog()
+            drawingtreeSS1.Show()
 
             Dim sFileName As String
             sFileName = oDoc.FullFileName
@@ -646,8 +719,7 @@ SKIP:
             'oMasterLODDoc = g_inventorApplication.Documents.Open(sFileName, False)
             Dim oBOM As Inventor.BOM
             oBOM = oDoc.ComponentDefinition.BOM
-            oBOM.ImportBOMCustomization("Z:\GDH\Programs\Inventor iLogic and other files\PartsTreeFormat.xml")
-            'oBOM.PartsOnlyViewEnabled = True
+            oBOM.ImportBOMCustomization("Z:\PERMANENT INSTALL\Programming\Inventor iLogic and other files\PartsTreeFormat.xml")
             oBOM.StructuredViewEnabled = True
             oBOM.StructuredViewFirstLevelOnly = False
             oBOM.StructuredViewDelimiter = "-"
@@ -666,7 +738,7 @@ SKIP:
 
             'Excel processing
             excelApp = CreateObject("Excel.Application")
-            excelApp.Visible = False
+            excelApp.Visible = True
             excelApp.DisplayAlerts = False
 
             wb = excelApp.Workbooks.Open(My.Computer.FileSystem.SpecialDirectories.Desktop & "\" & Time.ToString(Format) & "_" & fname & "_PartsTree.xlsm")
@@ -678,7 +750,9 @@ SKIP:
             drawingtreeSS1.Hide()
             'Dim docdescription As String = g_inventorApplication.ActiveDocument.PropertySets.Item("Inventor User Defined Properties").Item("Description").Value
             'Call CreatePartsTree(docname, docdescription)
-            Call CreatePartsTree()
+            Dim ElementNumber As String = oDoc.DisplayName.Substring(0, oDoc.DisplayName.Length - 4)
+            Dim ElementName As String = oDoc.PropertySets.Item("Design Tracking Properties").Item("Part Number").Value
+            Call CreatePartsTree(ElementNumber, ElementName)
 
             excelApp = Nothing
 
@@ -717,7 +791,7 @@ SKIP:
                 Err.Clear()
             End If
         End Sub
-        Sub CreatePartsTree()
+        Sub CreatePartsTree(ByVal RootNumber As String, ByVal RootName As String)
             Dim oSALayout As SmartArtLayout
             Dim QNode As SmartArtNode
             Dim LastNode As SmartArtNode
@@ -738,14 +812,15 @@ SKIP:
             Dim inputINFOtitle As Object
             Dim oShp As Microsoft.Office.Interop.Excel.Shape
 
-            inputINFOpartnumber = InputBox("Please input the Element Part Number")
-            'inputINFOpartnumber = nme
-            inputINFOtitle = InputBox("Please input the Element Title")
-            'inputINFOtitle = dcrptn
+            inputINFOpartnumber = RootNumber
+            'inputINFOpartnumber = InputBox("Please input the Element Part Number")
+
+            inputINFOtitle = RootName
+            'inputINFOtitle = InputBox("Please input the Element Title")
 
             Dim drawingtreeSS2 As New frmDrawingTreeSplashScreen
             drawingtreeSS2.Label1.Text = "Configuring drawing tree..."
-            drawingtreeSS2.ShowDialog()
+            drawingtreeSS2.Show()
 
             oSALayout = excelApp.SmartArtLayouts(97)                                    'reference to block organization chart
             oShp = wb.ActiveSheet.Shapes.AddSmartArt(oSALayout)
@@ -768,7 +843,7 @@ SKIP:
             LevelCount = 0
             RootCount = 0
 
-            For x = 1 To NumRows                                                        ' Establish "For" loop to loop "numrows" number of times.
+            For x = 1 To NumRows  ' Establish "For" loop to loop "Numrows" number of times.
                 If CStr(targetcell.Value) Like "#" Or CStr(targetcell.Value) Like "##" Then
                     If targetcell.Offset(0, 9).Value = "Buy" Or targetcell.Offset(0, 9).Value = "" Then
                         GoTo NXT
@@ -853,6 +928,10 @@ NXT:
         Public Sub BtnPropConfig_OnExecute(Context As NameValueMap) Handles BtnPropConfig.OnExecute
             Dim PropertyConfigForm As New frmPropConfig 'Launch the frmSmartPartPRO form when the button is clicked.
             PropertyConfigForm.ShowDialog()
+        End Sub
+        Public Sub BtnFastenerEdgeDistRef_OnExecute(Context As NameValueMap) Handles BtnFastenerEdgeDistRef.OnExecute
+            Dim EdgeRefForm As New frmEdgeDist 'Launch the frmEdgeDist form when the button is clicked.
+            EdgeRefForm.Show()
         End Sub
         Private Sub BtnMKDwgRef_OnExecute(Context As NameValueMap) Handles BtnMKDwgRef.OnExecute
             Dim FileDestinationName As String = "Z:\PERMANENT INSTALL\Programming\TAIT PI Inventor Add-in\PI_Drawing References\Mario Kart Sample Kit Drawing 2018.04.06.pdf"
@@ -940,7 +1019,6 @@ NXT:
             invApp = Nothing
             Doc = Nothing
         End Sub
-
         Private Sub BtnKAPPAApplyDwgTemplate_OnExecute(Context As NameValueMap) Handles BtnKAPPAApplyDwgTemplate.OnExecute
 
             Dim result As Integer = MessageBox.Show("Would you like to update KAPPA drawing templates in the active drawing document?", "Continue template update?", MessageBoxButtons.OKCancel)
@@ -1009,7 +1087,6 @@ NXT:
             invApp = Nothing
             Doc = Nothing
         End Sub
-
         Private Sub BtnTestVaultConn_OnExecute(Context As NameValueMap) Handles BtnTestVaultConn.OnExecute
             Dim strVaulrServerName As String = Connectivity.InventorAddin.EdmAddin.EdmSecurity.Instance.GetEdmLoginPreferences.Server
             Dim strVaultName As String = Connectivity.InventorAddin.EdmAddin.EdmSecurity.Instance.GetEdmLoginPreferences.VaultName
@@ -1048,13 +1125,9 @@ NXT:
             f.ShowDialog()
             MsgBox("Dockable form opened.")
         End Sub
-
 #End Region
-
     End Class
 End Namespace
-
-
 Public Module Globals
     ' Inventor application object.
     Public g_inventorApplication As Inventor.Application
@@ -1108,10 +1181,10 @@ Public Module Globals
     ' Dim smallIcon As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(My.Resources.MyIcon)
 
     Public NotInheritable Class PictureDispConverter
-        <DllImport("OleAut32.dll", EntryPoint:="OleCreatePictureIndirect", ExactSpelling:=True, PreserveSig:=False)> _
-        Private Shared Function OleCreatePictureIndirect( _
-            <MarshalAs(UnmanagedType.AsAny)> ByVal picdesc As Object, _
-            ByRef iid As Guid, _
+        <DllImport("OleAut32.dll", EntryPoint:="OleCreatePictureIndirect", ExactSpelling:=True, PreserveSig:=False)>
+        Private Shared Function OleCreatePictureIndirect(
+            <MarshalAs(UnmanagedType.AsAny)> ByVal picdesc As Object,
+            ByRef iid As Guid,
             <MarshalAs(UnmanagedType.Bool)> ByVal fOwn As Boolean) As stdole.IPictureDisp
         End Function
 
@@ -1125,7 +1198,7 @@ Public Module Globals
             Public Const PICTYPE_BITMAP As Short = 1
             Public Const PICTYPE_ICON As Short = 3
 
-            <StructLayout(LayoutKind.Sequential)> _
+            <StructLayout(LayoutKind.Sequential)>
             Public Class Icon
                 Friend cbSizeOfStruct As Integer = Marshal.SizeOf(GetType(PICTDESC.Icon))
                 Friend picType As Integer = PICTDESC.PICTYPE_ICON
@@ -1138,7 +1211,7 @@ Public Module Globals
                 End Sub
             End Class
 
-            <StructLayout(LayoutKind.Sequential)> _
+            <StructLayout(LayoutKind.Sequential)>
             Public Class Bitmap
                 Friend cbSizeOfStruct As Integer = Marshal.SizeOf(GetType(PICTDESC.Bitmap))
                 Friend picType As Integer = PICTDESC.PICTYPE_BITMAP

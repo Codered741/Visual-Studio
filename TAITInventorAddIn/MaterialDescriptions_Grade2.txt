@@ -9,6 +9,7 @@ Stainless Steel|Angle, Channel, Wide Flange Beam, Plate, Rect Tube, Round Tube, 
 Stainless Steel|Bar, Round|440C|Typical stainless shafting material.
 Stainless Steel|Bar, Round, Plate|17-4 H1150|Typical Stainless high strength shafting material.								
 Stainless Steel|Bar, Round|17-4 H900|
+Stainless Steel|Bar, Round|303|For ease of machining in turning operations.
 Carbon Steel|Angle, Channel, S-Shape, Bar, Round, Plate|ASTM A36|
 Carbon Steel|Bar, Round|A4340 Q&T|
 Carbon Steel|Pipe|ASTM A53 Gr.B|

@@ -29,20 +29,23 @@ Partial Class frmEdgeDist
         '
         'PictureBox1
         '
-        Me.PictureBox1.Image = Global.TAITInventorAddIn.My.Resources.Resources.Hole_Edge_Distances_2018_04_24
-        Me.PictureBox1.Location = New System.Drawing.Point(12, 12)
+        Me.PictureBox1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
+        Me.PictureBox1.Location = New System.Drawing.Point(0, 0)
+        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(650, 604)
+        Me.PictureBox1.Size = New System.Drawing.Size(620, 600)
         Me.PictureBox1.TabIndex = 0
         Me.PictureBox1.TabStop = False
         '
         'frmEdgeDist
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(668, 628)
+        Me.ClientSize = New System.Drawing.Size(620, 600)
         Me.Controls.Add(Me.PictureBox1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Name = "frmEdgeDist"
         Me.Text = " Edge Distances"
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
