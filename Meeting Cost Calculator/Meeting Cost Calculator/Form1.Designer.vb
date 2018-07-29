@@ -23,6 +23,7 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.btnStart = New System.Windows.Forms.Button()
         Me.tbRate = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -37,6 +38,7 @@ Partial Class Form1
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.btnStop = New System.Windows.Forms.Button()
         Me.btnReset = New System.Windows.Forms.Button()
+        Me.lblVer = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'btnStart
@@ -166,11 +168,23 @@ Partial Class Form1
         Me.btnReset.Text = "Reset"
         Me.btnReset.UseVisualStyleBackColor = True
         '
+        'lblVer
+        '
+        Me.lblVer.AutoSize = True
+        Me.lblVer.ForeColor = System.Drawing.SystemColors.ControlDark
+        Me.lblVer.Location = New System.Drawing.Point(237, 9)
+        Me.lblVer.Name = "lblVer"
+        Me.lblVer.Size = New System.Drawing.Size(39, 13)
+        Me.lblVer.TabIndex = 6
+        Me.lblVer.Text = "Label3"
+        Me.lblVer.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(284, 314)
+        Me.Controls.Add(Me.lblVer)
         Me.Controls.Add(Me.btnReset)
         Me.Controls.Add(Me.btnStop)
         Me.Controls.Add(Me.Label8)
@@ -184,6 +198,7 @@ Partial Class Form1
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.tbRate)
         Me.Controls.Add(Me.btnStart)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "Form1"
         Me.Text = "Meeting Cost"
         Me.ResumeLayout(False)
@@ -205,4 +220,5 @@ Partial Class Form1
     Friend WithEvents Timer1 As Timer
     Friend WithEvents btnStop As Button
     Friend WithEvents btnReset As Button
+    Friend WithEvents lblVer As Label
 End Class
