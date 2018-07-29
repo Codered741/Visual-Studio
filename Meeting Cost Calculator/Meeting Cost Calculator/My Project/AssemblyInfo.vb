@@ -10,10 +10,10 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("Meeting Cost Calculator")>
 <Assembly: AssemblyDescription("")>
-<Assembly: AssemblyCompany("TAIT Towers")>
+<Assembly: AssemblyCompany("CodeRed")>
 <Assembly: AssemblyProduct("Meeting Cost Calculator")>
-<Assembly: AssemblyCopyright("Copyright © TAIT Towers 2018")>
-<Assembly: AssemblyTrademark("")>
+<Assembly: AssemblyCopyright("CodeRed 2018")>
+<Assembly: AssemblyTrademark("CodeRed 2018")>
 
 <Assembly: ComVisible(False)>
 
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.0.0.6")>
-<Assembly: AssemblyFileVersion("1.0.0.6")>
+<Assembly: AssemblyVersion("1.0.0.8")>
+<Assembly: AssemblyFileVersion("1.0.0.8")>
