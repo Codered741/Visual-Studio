@@ -172,11 +172,11 @@ Partial Class Form1
         '
         Me.lblVer.AutoSize = True
         Me.lblVer.ForeColor = System.Drawing.SystemColors.ControlDark
-        Me.lblVer.Location = New System.Drawing.Point(237, 9)
+        Me.lblVer.Location = New System.Drawing.Point(226, 9)
         Me.lblVer.Name = "lblVer"
-        Me.lblVer.Size = New System.Drawing.Size(39, 13)
+        Me.lblVer.Size = New System.Drawing.Size(52, 13)
         Me.lblVer.TabIndex = 6
-        Me.lblVer.Text = "Label3"
+        Me.lblVer.Text = "v0.0.0.00"
         Me.lblVer.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Form1
