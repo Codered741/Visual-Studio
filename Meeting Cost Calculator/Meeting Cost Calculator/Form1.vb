@@ -1,8 +1,10 @@
-﻿Imports System.Reflection
+﻿Imports System.Collections
+Imports System.Diagnostics
+Imports System.Reflection
+Imports System.Text
+
 Public Class Form1
     Private stopwatch As New Stopwatch
-
-
 
     Public Sub New()
 
@@ -88,4 +90,18 @@ Public Class Form1
         Dim elapsed As TimeSpan = Me.stopwatch.Elapsed
         Calculate = "$" & Math.Round(elapsed.TotalSeconds * (Integer.Parse(tbRate.Text) / 3600) * Integer.Parse(tbNumAtt.Text), 2)
     End Function
+
+    Sub lblContact_Click(sender As Object, e As EventArgs) Handles lblContact.Click
+
+        Dim theStringBuilder As New StringBuilder()
+
+        theStringBuilder.Append("mailto:codered741@gmail.com")
+
+        theStringBuilder.Append("&subject=MCC Feedback")
+
+        theStringBuilder.Append("&body=This is Awesome!")
+
+        Process.Start(theStringBuilder.ToString())
+    End Sub
+
 End Class

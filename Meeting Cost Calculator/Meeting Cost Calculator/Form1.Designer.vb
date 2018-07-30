@@ -39,6 +39,7 @@ Partial Class Form1
         Me.btnStop = New System.Windows.Forms.Button()
         Me.btnReset = New System.Windows.Forms.Button()
         Me.lblVer = New System.Windows.Forms.Label()
+        Me.lblContact = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'btnStart
@@ -179,11 +180,23 @@ Partial Class Form1
         Me.lblVer.Text = "v0.0.0.00"
         Me.lblVer.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
+        'lblContact
+        '
+        Me.lblContact.AutoSize = True
+        Me.lblContact.ForeColor = System.Drawing.SystemColors.ControlDark
+        Me.lblContact.Location = New System.Drawing.Point(234, 22)
+        Me.lblContact.Name = "lblContact"
+        Me.lblContact.Size = New System.Drawing.Size(44, 13)
+        Me.lblContact.TabIndex = 7
+        Me.lblContact.Text = "Contact"
+        Me.lblContact.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(284, 314)
+        Me.Controls.Add(Me.lblContact)
         Me.Controls.Add(Me.lblVer)
         Me.Controls.Add(Me.btnReset)
         Me.Controls.Add(Me.btnStop)
@@ -221,4 +234,5 @@ Partial Class Form1
     Friend WithEvents btnStop As Button
     Friend WithEvents btnReset As Button
     Friend WithEvents lblVer As Label
+    Friend WithEvents lblContact As Label
 End Class
