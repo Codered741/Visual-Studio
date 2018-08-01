@@ -31,7 +31,6 @@ Partial Class Form1
         Me.lblMC = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
-        Me.tbNumAtt = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.lblET = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
@@ -40,6 +39,12 @@ Partial Class Form1
         Me.btnReset = New System.Windows.Forms.Button()
         Me.lblVer = New System.Windows.Forms.Label()
         Me.lblContact = New System.Windows.Forms.Label()
+        Me.tbNumAtt = New System.Windows.Forms.NumericUpDown()
+        Me.ListBox1 = New System.Windows.Forms.ListBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Form1BindingSource = New System.Windows.Forms.BindingSource(Me.components)
+        CType(Me.tbNumAtt, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.Form1BindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'btnStart
@@ -108,14 +113,6 @@ Partial Class Form1
         Me.Label5.TabIndex = 0
         Me.Label5.Text = "# of Attendees"
         '
-        'tbNumAtt
-        '
-        Me.tbNumAtt.Location = New System.Drawing.Point(12, 79)
-        Me.tbNumAtt.Name = "tbNumAtt"
-        Me.tbNumAtt.Size = New System.Drawing.Size(100, 20)
-        Me.tbNumAtt.TabIndex = 2
-        Me.tbNumAtt.Text = "1"
-        '
         'Label6
         '
         Me.Label6.AutoSize = True
@@ -173,7 +170,7 @@ Partial Class Form1
         '
         Me.lblVer.AutoSize = True
         Me.lblVer.ForeColor = System.Drawing.SystemColors.ControlDark
-        Me.lblVer.Location = New System.Drawing.Point(226, 9)
+        Me.lblVer.Location = New System.Drawing.Point(439, 9)
         Me.lblVer.Name = "lblVer"
         Me.lblVer.Size = New System.Drawing.Size(52, 13)
         Me.lblVer.TabIndex = 6
@@ -184,18 +181,50 @@ Partial Class Form1
         '
         Me.lblContact.AutoSize = True
         Me.lblContact.ForeColor = System.Drawing.SystemColors.ControlDark
-        Me.lblContact.Location = New System.Drawing.Point(234, 22)
+        Me.lblContact.Location = New System.Drawing.Point(376, 295)
         Me.lblContact.Name = "lblContact"
         Me.lblContact.Size = New System.Drawing.Size(44, 13)
         Me.lblContact.TabIndex = 7
         Me.lblContact.Text = "Contact"
         Me.lblContact.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
+        'tbNumAtt
+        '
+        Me.tbNumAtt.Location = New System.Drawing.Point(13, 83)
+        Me.tbNumAtt.Name = "tbNumAtt"
+        Me.tbNumAtt.Size = New System.Drawing.Size(100, 20)
+        Me.tbNumAtt.TabIndex = 8
+        Me.tbNumAtt.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        '
+        'ListBox1
+        '
+        Me.ListBox1.FormattingEnabled = True
+        Me.ListBox1.Location = New System.Drawing.Point(294, 28)
+        Me.ListBox1.Name = "ListBox1"
+        Me.ListBox1.Size = New System.Drawing.Size(195, 264)
+        Me.ListBox1.TabIndex = 9
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(294, 9)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(54, 13)
+        Me.Label3.TabIndex = 10
+        Me.Label3.Text = "Segments"
+        '
+        'Form1BindingSource
+        '
+        Me.Form1BindingSource.DataSource = GetType(Meeting_Cost_Calculator.Form1)
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(284, 314)
+        Me.ClientSize = New System.Drawing.Size(502, 311)
+        Me.Controls.Add(Me.Label3)
+        Me.Controls.Add(Me.ListBox1)
+        Me.Controls.Add(Me.tbNumAtt)
         Me.Controls.Add(Me.lblContact)
         Me.Controls.Add(Me.lblVer)
         Me.Controls.Add(Me.btnReset)
@@ -205,15 +234,19 @@ Partial Class Form1
         Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label5)
-        Me.Controls.Add(Me.tbNumAtt)
         Me.Controls.Add(Me.lblMC)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.tbRate)
         Me.Controls.Add(Me.btnStart)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MaximizeBox = False
+        Me.MinimumSize = New System.Drawing.Size(0, 350)
         Me.Name = "Form1"
         Me.Text = "Meeting Cost"
+        CType(Me.tbNumAtt, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.Form1BindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -226,7 +259,6 @@ Partial Class Form1
     Friend WithEvents lblMC As Label
     Friend WithEvents Label4 As Label
     Friend WithEvents Label5 As Label
-    Friend WithEvents tbNumAtt As TextBox
     Friend WithEvents Label6 As Label
     Friend WithEvents lblET As Label
     Friend WithEvents Label8 As Label
@@ -235,4 +267,8 @@ Partial Class Form1
     Friend WithEvents btnReset As Button
     Friend WithEvents lblVer As Label
     Friend WithEvents lblContact As Label
+    Friend WithEvents tbNumAtt As NumericUpDown
+    Friend WithEvents ListBox1 As ListBox
+    Friend WithEvents Form1BindingSource As BindingSource
+    Friend WithEvents Label3 As Label
 End Class
