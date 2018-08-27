@@ -9,7 +9,6 @@ Public Class frmPropConfig
     Public MaterialDescription As String
     Public Sub frmPropConfig_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Connect to a running instance of Inventor. 
-        ' Watch out for the wrapped line. 
         Dim invApp As Inventor.Application
         invApp = System.Runtime.InteropServices.Marshal.GetActiveObject("Inventor.Application")
 
@@ -200,8 +199,31 @@ nOBJd:
             MsgBox("Error loading designer list")
         End Try
 
-        cmbApprovers.Items.Add("ARY (Adam R. Yeager)")
-        cmbApprovers.Items.Add("PAW (Peter A. Woods)")
+        Dim Approvers() As String
+        ''Read the Props_Designers.txt file and populate cmbProjects and cmbCheckers list items
+        Try
+            Approvers = IO.File.ReadAllLines("Z:\PERMANENT INSTALL\Programming\TAIT PI Inventor Add-in\Props_Approvers.txt")
+
+            Dim approverlist As New ArrayList()
+            For p As Integer = 0 To Approvers.GetUpperBound(0)
+                approverlist.Add(Approvers(p))
+            Next
+
+            Dim XApprover As String
+            For n = 0 To approverlist.Count - 1
+                If approverlist.Item(n).ToString.Substring(0, 1) = "*" Then
+                    GoTo nOBJa
+                End If
+                XApprover = approverlist.Item(n).ToString
+                cmbApprovers.Items.Add(XApprover)
+nOBJa:
+            Next
+
+        Catch exc As Exception
+            ' Report all errors.
+            MsgBox("Error loading approver list")
+        End Try
+
     End Sub
     Public Sub cmbProjects_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbProjects.SelectedIndexChanged
         cmbElements.Items.Clear()

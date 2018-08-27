@@ -4,17 +4,8 @@
 *Each line represents a designer/checker.
 *Notes lines begin with "*" All lines without an asterisk(*) will be read.
 *
-GDH (Gregory D. Hill)
 ARY (Adam R. Yeager)
-MJE (Manny J. Esteves)
-SMD (Steve M. Dodd)
-CP  (Chuck Pfeiffer)
-NP  (Nicole Parker)
-DJP (David J. Patzer)
-JCL (Jeffrey C. Lund)
-JEL (Jojo E.Leovonchiong)
-SER (Scott E. Rice)
-AYC (Alexandria Y. Catania)
-NB  (Nick Bonsell)
-DS  (Dane Styczynski)
-AH  (Andrew Hyatt)
+PAW  (Peter A. Woods)
+KF  (Kevin Flagg)
+RH  (Ryan Hunter)
+SP  (Suzanna Paulos)
