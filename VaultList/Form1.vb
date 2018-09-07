@@ -10,6 +10,9 @@
 'PARTICULAR PURPOSE.
 '=====================================================================
 
+'NOTES
+'Removed Server name and Vault Name from vltLogin(), need to add them back in when running
+
 Imports System.Drawing
 Imports System.Collections
 Imports System.ComponentModel
@@ -60,7 +63,7 @@ Public Class Form1
     End Sub
 
     Function vltLogin() As VDF.Vault.Results.LogInResult
-        Dim results As VDF.Vault.Results.LogInResult = VDF.Vault.Library.ConnectionManager.LogIn("tait-ltz-edm01", "TAIT_TOWERS", "Guest", "", VDF.Vault.Currency.Connections.AuthenticationFlags.WindowsAuthentication, Nothing)
+        Dim results As VDF.Vault.Results.LogInResult = VDF.Vault.Library.ConnectionManager.LogIn(oServerName, oVaultName, "Guest", "", VDF.Vault.Currency.Connections.AuthenticationFlags.WindowsAuthentication, Nothing)
         Return results
     End Function
 
