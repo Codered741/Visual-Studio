@@ -42,7 +42,7 @@ Public Class frmMaterialSpec
 
         lvGrades.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize)
 
-        ''Read the aisc-shapes-database-v15.0.xlsx and populate shape sizes
+        ''clear or generate new list arrays
         Try
             If W_shapes_std.Count > 0 Then
                 W_shapes_std.Clear()
@@ -95,54 +95,123 @@ Public Class frmMaterialSpec
             Pipe_shapes_met = New ArrayList
         End Try
 
-        Dim HSSname As String
-        Dim excelApp As Microsoft.Office.Interop.Excel.Application
-        Dim aiscdb_wb As Workbook
-        Dim aiscdb_ws As Worksheet
+        Using MyReader As New Microsoft.VisualBasic.FileIO.TextFieldParser("Z:\PERMANENT INSTALL\Programming\TAIT PI Inventor Add-in\aisc-shapes-database-v15.0_TAIT.csv")
+            MyReader.TextFieldType = FileIO.FieldType.Delimited
+            MyReader.SetDelimiters(",")
 
-        'Excel processing
-        excelApp = CreateObject("Excel.Application")
-        excelApp.Visible = False
-        excelApp.DisplayAlerts = False
+            MyReader.ReadLine() ' skip header line
+            Dim currentRow As String()
+            While Not MyReader.EndOfData
+                Try
+                    currentRow = MyReader.ReadFields()
+                    Dim currentField As String
+                    Dim shapetype As String = ""
+                    Dim linecount As Integer = 0
+                    For Each currentField In currentRow
+                        'MsgBox("Shape: " & shapetype & vbNewLine &
+                        '       "linecount: " & linecount & vbNewLine &
+                        '       "field value: " & currentField)
+                        If linecount = 0 Then
+                            shapetype = currentField
+                        Else
+                            Select Case shapetype
+                                Case "W"
+                                    If linecount = 1 Then
+                                        W_shapes_std.Add(currentField)
+                                    ElseIf linecount = 4 Then
+                                        W_shapes_met.Add(currentField)
+                                    End If
+                                Case "C"
+                                    If linecount = 1 Then
+                                        C_shapes_std.Add(currentField)
+                                    ElseIf linecount = 4 Then
+                                        C_shapes_met.Add(currentField)
+                                    End If
+                                Case "L"
+                                    If linecount = 1 Then
+                                        L_shapes_std.Add(currentField)
+                                    ElseIf linecount = 4 Then
+                                        L_shapes_met.Add(currentField)
+                                    End If
+                                Case "HSS"
+                                    If linecount = 1 And currentField.Split("X").Length = 3 Then
+                                        HSSrect_shapes_std.Add(currentField)
+                                    ElseIf linecount = 4 And currentField.Split("X").Length = 3 Then
+                                        HSSrect_shapes_met.Add(currentField)
+                                    ElseIf linecount = 1 And currentField.Split("X").Length = 2 Then
+                                        HSSround_shapes_std.Add(currentField)
+                                    ElseIf linecount = 4 And currentField.Split("X").Length = 2 Then
+                                        HSSround_shapes_met.Add(currentField)
+                                    Else
+                                        'MsgBox("Problem finding HSS shapes for Carbon Steel.")
+                                    End If
+                                Case "PIPE"
+                                    If linecount = 1 Then
+                                        Pipe_shapes_std.Add(currentField)
+                                    ElseIf linecount = 4 Then
+                                        Pipe_shapes_met.Add(currentField)
+                                    End If
+                            End Select
+                        End If
+                        linecount = linecount + 1
+                    Next
+                Catch ex As Microsoft.VisualBasic.
+                  FileIO.MalformedLineException
+                    'MsgBox("Line " & ex.Message & "is not valid and will be skipped.")
+                End Try
+            End While
 
-        aiscdb_wb = excelApp.Workbooks.Open("Z:\PERMANENT INSTALL\Programming\TAIT PI Inventor Add-in\aisc-shapes-database-v15.0_TAIT.xlsx", False, True,, "elvisapresley")
-        aiscdb_ws = aiscdb_wb.Worksheets(1)
+        End Using
 
-        Dim activecell As Range
-        activecell = aiscdb_ws.Range("A2")
-        Dim NumDBRows As Integer
-        NumDBRows = aiscdb_ws.Range("A2", aiscdb_ws.Range("A2").End(XlDirection.xlDown)).Rows.Count  ' Set numrows = number of rows of data.
+        ''Read the aisc-shapes-database-v15.0.xlsx and populate shape sizes
+        'Dim HSSname As String
+        'Dim excelApp As Microsoft.Office.Interop.Excel.Application
+        'Dim aiscdb_wb As Workbook
+        'Dim aiscdb_ws As Worksheet
 
-        Dim ShapeCategory As String
-        For x = 1 To NumDBRows  ' Establish "For" loop to loop "NumDBrows" number of times.
-            ShapeCategory = CStr(activecell.Value)
-            Select Case ShapeCategory
-                Case "W"
-                    W_shapes_std.Add(CStr(activecell.Offset(0, 2).Value))
-                    W_shapes_met.Add(CStr(activecell.Offset(0, 85).Value))
-                Case "C"
-                    C_shapes_std.Add(CStr(activecell.Offset(0, 2).Value))
-                    C_shapes_met.Add(CStr(activecell.Offset(0, 85).Value))
-                Case "L"
-                    L_shapes_std.Add(CStr(activecell.Offset(0, 2).Value))
-                    L_shapes_met.Add(CStr(activecell.Offset(0, 85).Value))
-                Case "HSS"
-                    HSSname = CStr(activecell.Offset(0, 2).Value)
-                    If HSSname.Split("X").Length = 3 Then
-                        HSSrect_shapes_std.Add(CStr(activecell.Offset(0, 2).Value))
-                        HSSrect_shapes_met.Add(CStr(activecell.Offset(0, 85).Value))
-                    ElseIf HSSname.Split("X").Length = 2 Then
-                        HSSround_shapes_std.Add(CStr(activecell.Offset(0, 2).Value))
-                        HSSround_shapes_met.Add(CStr(activecell.Offset(0, 85).Value))
-                    Else
-                        MsgBox("Problem finding HSS shapes for Carbon Steel.")
-                    End If
-                Case "PIPE"
-                    Pipe_shapes_std.Add(CStr(activecell.Offset(0, 1).Value))
-                    Pipe_shapes_met.Add(CStr(activecell.Offset(0, 84).Value))
-            End Select
-            activecell = activecell.Offset(1, 0)
-        Next
+        ''Excel processing
+        'excelApp = CreateObject("Excel.Application")
+        'excelApp.Visible = False
+        'excelApp.DisplayAlerts = False
+
+        'aiscdb_wb = excelApp.Workbooks.Open("Z:\PERMANENT INSTALL\Programming\TAIT PI Inventor Add-in\aisc-shapes-database-v15.0_TAIT.xlsx", False, True,, "elvisapresley")
+        'aiscdb_ws = aiscdb_wb.Worksheets(1)
+
+        'Dim activecell As Range
+        'activecell = aiscdb_ws.Range("A2")
+        'Dim NumDBRows As Integer
+        'NumDBRows = aiscdb_ws.Range("A2", aiscdb_ws.Range("A2").End(XlDirection.xlDown)).Rows.Count  ' Set numrows = number of rows of data.
+
+        'Dim ShapeCategory As String
+        'For x = 1 To NumDBRows  ' Establish "For" loop to loop "NumDBrows" number of times.
+        '    ShapeCategory = CStr(activecell.Value)
+        '    Select Case ShapeCategory
+        '        Case "W"
+        '            W_shapes_std.Add(CStr(activecell.Offset(0, 2).Value))
+        '            W_shapes_met.Add(CStr(activecell.Offset(0, 85).Value))
+        '        Case "C"
+        '            C_shapes_std.Add(CStr(activecell.Offset(0, 2).Value))
+        '            C_shapes_met.Add(CStr(activecell.Offset(0, 85).Value))
+        '        Case "L"
+        '            L_shapes_std.Add(CStr(activecell.Offset(0, 2).Value))
+        '            L_shapes_met.Add(CStr(activecell.Offset(0, 85).Value))
+        '        Case "HSS"
+        '            HSSname = CStr(activecell.Offset(0, 2).Value)
+        '            If HSSname.Split("X").Length = 3 Then
+        '                HSSrect_shapes_std.Add(CStr(activecell.Offset(0, 2).Value))
+        '                HSSrect_shapes_met.Add(CStr(activecell.Offset(0, 85).Value))
+        '            ElseIf HSSname.Split("X").Length = 2 Then
+        '                HSSround_shapes_std.Add(CStr(activecell.Offset(0, 2).Value))
+        '                HSSround_shapes_met.Add(CStr(activecell.Offset(0, 85).Value))
+        '            Else
+        '                MsgBox("Problem finding HSS shapes for Carbon Steel.")
+        '            End If
+        '        Case "PIPE"
+        '            Pipe_shapes_std.Add(CStr(activecell.Offset(0, 1).Value))
+        '            Pipe_shapes_met.Add(CStr(activecell.Offset(0, 84).Value))
+        '    End Select
+        '    activecell = activecell.Offset(1, 0)
+        'Next
 
         ' Connect to a running instance of Inventor. 
         ' Watch out for the wrapped line. 
@@ -156,8 +225,8 @@ Public Class frmMaterialSpec
         'Read the Material iProperty and relay to label
         Call ReadCustomiProperty(Doc, "Material")
 
-        aiscdb_wb.Close(False)
-        excelApp = Nothing
+        'aiscdb_wb.Close(False)
+        'excelApp = Nothing
         invApp = Nothing
         Doc = Nothing
 
@@ -643,5 +712,9 @@ nOBJ:
             nudD2.DecimalPlaces = 2
             nudD3.DecimalPlaces = 2
         End If
+    End Sub
+
+    Private Sub GroupBox1_Enter(sender As Object, e As EventArgs) Handles GroupBox1.Enter
+
     End Sub
 End Class

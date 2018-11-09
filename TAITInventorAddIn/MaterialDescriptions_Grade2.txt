@@ -18,11 +18,12 @@ Carbon Steel|Round Tube|ASTM A513 DOM Gr.1026|
 Carbon Steel|Round Tube|ASTM A513 DOM Gr.4140|
 Carbon Steel|Plate|ASTM A514|
 Carbon Steel|Round Tube, Rect Tube|ASTM A500 Gr.B|
-Carbon Steel|Bar, Round, Plate|ASTM A572 Gr.50|
+Carbon Steel|Bar, Round, Plate, Rect Tube|ASTM A572 Gr.50|
 Carbon Steel|Bar, Round, Plate|ASTM A572 Gr.65|
 Carbon Steel|Bar, Round, Plate|ASTM A529 Gr.50|
 Carbon Steel|Bar, Round, Plate|ASTM A529 Gr.55|
 Carbon Steel|Wide Flange Beam|ASTM A992|
+Carbon Steel|Rect Tubes|ASTM A1085|
 Aluminum|Angle, Channel, Wide Flange Beam, Plate, Rect Tube, Round Tube, Pipe, Bar, Round|6061-T6|
 Aluminum|Plate|5052-H32|Used for formed plate. Significantly weaker than 6061-T6, especially when welded.
 UHMW|Plate, Bar, Round|White|

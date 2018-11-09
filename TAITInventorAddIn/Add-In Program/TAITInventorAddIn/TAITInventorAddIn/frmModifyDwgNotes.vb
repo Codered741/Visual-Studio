@@ -199,7 +199,7 @@ NXTnote:
         invApp = System.Runtime.InteropServices.Marshal.GetActiveObject("Inventor.Application")
 
         ' Get the active document. 
-        Dim Doc As Inventor.Document
+        Dim Doc As Inventor._DrawingDocument
         Doc = invApp.ActiveDocument
 
         'Convert the NotesList to a string
@@ -235,7 +235,18 @@ NXTnote:
         End Try
 
         Dim NewNote As GeneralNote
-        NewNote = oGeneralNotes.AddFitted(oTG.CreatePoint2d(1.25, 26.75), s)
+
+        Dim templateNAME As String
+        templateNAME = Doc.ActiveSheet.TitleBlock.Name
+
+        If templateNAME.ToString = "PROJECT KAPPA" Or templateNAME.ToString = "PROJECT KAPPA COVER SHEET" Then
+            NewNote = oGeneralNotes.AddFitted(oTG.CreatePoint2d(1.5, 26.5), s)
+        ElseIf templateNAME.ToString = "UNIVERSAL MARIO KART" Or templateNAME.ToString = "UNIVERSAL MARIO KART COVER SHEET" Then
+            NewNote = oGeneralNotes.AddFitted(oTG.CreatePoint2d(1.25, 26.75), s)
+        Else
+            NewNote = oGeneralNotes.AddFitted(oTG.CreatePoint2d(1.25, 26.75), s)
+        End If
+
 
         invApp = Nothing
         Doc = Nothing
