@@ -7,68 +7,88 @@ Namespace TAITInventorAddIn
     Partial Class DockForm
         Inherits System.Windows.Forms.Form
 
-        Public Sub New(app As Inventor.Application, addInCLS As String)
-
-            InitializeComponent()
-            Dim uiMgr As UserInterfaceManager = app.UserInterfaceManager
-            Dim myDockableWindow As DockableWindow = uiMgr.DockableWindows.Add(addInCLS, "MyWindow", "TAIT PI Test Dockform")
-            myDockableWindow.AddChild(Me.Handle)
-
-            ' Default docking state
-            If Not myDockableWindow.IsCustomized Then
-                myDockableWindow.DockingState = DockingStateEnum.kFloat
-                'myDockableWindow.DockingState = DockingStateEnum.kDockTop
-                'myDockableWindow.DisabledDockingStates = DockingStateEnum.kDockLeft + DockingStateEnum.kDockRight
-                myDockableWindow.Move(25, 25, myDockableWindow.Height, myDockableWindow.Width)
-            End If
-            Me.Visible = True
-            myDockableWindow.Visible = True
-
-        End Sub
-
-        'Form overrides dispose to clean up the component list.
-        <System.Diagnostics.DebuggerNonUserCode()> Protected Overrides Sub Dispose(ByVal disposing As Boolean)
-            Try
-                If disposing AndAlso components IsNot Nothing Then
-                    components.Dispose()
-                End If
-            Finally
-                MyBase.Dispose(disposing)
-            End Try
-
-        End Sub
-
-        'Required by the Windows Form Designer
-        Private components As System.ComponentModel.IContainer
-
         Private Sub InitializeComponent()
-            Me.ElementHost1 = New System.Windows.Forms.Integration.ElementHost()
-            Me.UserControlG1 = New WpfApp1.UserControlG()
+            Me.Button1 = New System.Windows.Forms.Button()
+            Me.TextBox1 = New System.Windows.Forms.TextBox()
+            Me.ListView1 = New System.Windows.Forms.ListView()
+            Me.Label1 = New System.Windows.Forms.Label()
+            Me.Button2 = New System.Windows.Forms.Button()
+            Me.Button3 = New System.Windows.Forms.Button()
             Me.SuspendLayout()
             '
-            'ElementHost1
+            'Button1
             '
-            Me.ElementHost1.Dock = System.Windows.Forms.DockStyle.Fill
-            Me.ElementHost1.Location = New System.Drawing.Point(0, 0)
-            Me.ElementHost1.Name = "ElementHost1"
-            Me.ElementHost1.Size = New System.Drawing.Size(300, 158)
-            Me.ElementHost1.TabIndex = 0
-            Me.ElementHost1.Text = "ElementHost1"
-            Me.ElementHost1.Child = Me.UserControlG1
+            Me.Button1.Location = New System.Drawing.Point(12, 12)
+            Me.Button1.Name = "Button1"
+            Me.Button1.Size = New System.Drawing.Size(112, 24)
+            Me.Button1.TabIndex = 1
+            Me.Button1.Text = "Button1"
+            Me.Button1.UseVisualStyleBackColor = True
+            '
+            'TextBox1
+            '
+            Me.TextBox1.Location = New System.Drawing.Point(12, 42)
+            Me.TextBox1.Name = "TextBox1"
+            Me.TextBox1.Size = New System.Drawing.Size(222, 20)
+            Me.TextBox1.TabIndex = 2
+            '
+            'ListView1
+            '
+            Me.ListView1.HideSelection = False
+            Me.ListView1.Location = New System.Drawing.Point(12, 96)
+            Me.ListView1.Name = "ListView1"
+            Me.ListView1.Size = New System.Drawing.Size(405, 85)
+            Me.ListView1.TabIndex = 3
+            Me.ListView1.UseCompatibleStateImageBehavior = False
+            '
+            'Label1
+            '
+            Me.Label1.AutoSize = True
+            Me.Label1.Location = New System.Drawing.Point(12, 80)
+            Me.Label1.Name = "Label1"
+            Me.Label1.Size = New System.Drawing.Size(39, 13)
+            Me.Label1.TabIndex = 4
+            Me.Label1.Text = "Label1"
+            '
+            'Button2
+            '
+            Me.Button2.Location = New System.Drawing.Point(187, 187)
+            Me.Button2.Name = "Button2"
+            Me.Button2.Size = New System.Drawing.Size(112, 24)
+            Me.Button2.TabIndex = 5
+            Me.Button2.Text = "Button2"
+            Me.Button2.UseVisualStyleBackColor = True
+            '
+            'Button3
+            '
+            Me.Button3.Location = New System.Drawing.Point(305, 187)
+            Me.Button3.Name = "Button3"
+            Me.Button3.Size = New System.Drawing.Size(112, 24)
+            Me.Button3.TabIndex = 6
+            Me.Button3.Text = "Button3"
+            Me.Button3.UseVisualStyleBackColor = True
             '
             'DockForm
             '
-            Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-            Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-            Me.AutoSize = True
-            Me.ClientSize = New System.Drawing.Size(300, 158)
-            Me.Controls.Add(Me.ElementHost1)
+            Me.ClientSize = New System.Drawing.Size(426, 224)
+            Me.Controls.Add(Me.Button3)
+            Me.Controls.Add(Me.Button2)
+            Me.Controls.Add(Me.Label1)
+            Me.Controls.Add(Me.ListView1)
+            Me.Controls.Add(Me.TextBox1)
+            Me.Controls.Add(Me.Button1)
+            Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
             Me.Name = "DockForm"
             Me.ResumeLayout(False)
+            Me.PerformLayout()
 
         End Sub
 
-        Friend WithEvents ElementHost1 As Integration.ElementHost
-        Friend UserControlG1 As WpfApp1.UserControlG
+        Friend WithEvents Button1 As Button
+        Friend WithEvents TextBox1 As Windows.Forms.TextBox
+        Friend WithEvents ListView1 As ListView
+        Friend WithEvents Label1 As Label
+        Friend WithEvents Button2 As Button
+        Friend WithEvents Button3 As Button
     End Class
 End Namespace

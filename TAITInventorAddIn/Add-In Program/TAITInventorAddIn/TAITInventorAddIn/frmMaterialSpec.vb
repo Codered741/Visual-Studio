@@ -436,7 +436,10 @@ Public Class frmMaterialSpec
                     nudD1.Visible = True
                     nudD2.Visible = True
                 End If
-
+            Case "Sheet"
+                lblD1.Text = "Thickness"
+                lblD1.Visible = True
+                nudD1.Visible = True
             Case Else
                 MsgBox("Failed to determine correct dimension structure.")
         End Select
@@ -509,6 +512,7 @@ Public Class frmMaterialSpec
         Dim XShape As String
         Dim XGrade As String
         Dim XComments As String
+        Dim n As Integer
         For n = 0 To gradesarray.Count - 1
             If gradesarray.Item(n).ToString.Substring(0, 1) = "*" Then
                 GoTo nOBJ
@@ -620,7 +624,8 @@ nOBJ:
                     Else
                         lblMaterialDescription.Text = UCase(grade) & " " & UCase(material) & "; " & dim1 & " SCH" & dim2 & " " & UCase(shape)
                     End If
-
+                Case "Sheet"
+                    lblMaterialDescription.Text = UCase(grade) & " " & UCase(material) & "; " & dim1 & " " & UCase(shape)
                 Case Else
                     lblMaterialDescription.Text = ""
             End Select

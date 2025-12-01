@@ -4,19 +4,21 @@
 *Each line represents a material grade.
 *Notes lines begin with "*" All lines without an asterisk(*) will be read.
 *
-Stainless Steel|Angle, Channel, Wide Flange Beam, Plate, Rect Tube, Round Tube, Pipe|304|Typical stainless steel grade. 
+Stainless Steel|Angle, Channel, Wide Flange Beam, Plate, Rect Tube, Round Tube, Pipe, Sheet|304|Typical stainless steel grade. 
 Stainless Steel|Angle, Channel, Wide Flange Beam, Plate, Rect Tube, Round Tube, Pipe|304L|For welding applications.
 Stainless Steel|Bar, Round|440C|Typical stainless shafting material.
-Stainless Steel|Bar, Round, Plate|17-4 H1150|Typical Stainless high strength shafting material.								
+Stainless Steel|Bar, Round, Plate|17-4 H1150|Typical Stainless high strength shafting material. Not readily available as bar								
 Stainless Steel|Bar, Round|17-4 H900|
+Stainless Steel|Bar, Round|416|
+Stainless Steel|Bar, Round|316L|For corrosive environments when welding
 Stainless Steel|Bar, Round|303|For ease of machining in turning operations.
-Carbon Steel|Angle, Channel, S-Shape, Bar, Round, Plate|ASTM A36|
+Carbon Steel|Angle, Channel, S-Shape, Bar, Round, Plate, Sheet|ASTM A36|
 Carbon Steel|Bar, Round|A4340 Q&T|
 Carbon Steel|Pipe|ASTM A53 Gr.B|
 Carbon Steel|Round Tube|ASTM A513 DOM Gr.1020|
 Carbon Steel|Round Tube|ASTM A513 DOM Gr.1026|
 Carbon Steel|Round Tube|ASTM A513 DOM Gr.4140|
-Carbon Steel|Plate|ASTM A514|
+Carbon Steel|Plate, Sheet|ASTM A514|
 Carbon Steel|Round Tube, Rect Tube|ASTM A500 Gr.B|
 Carbon Steel|Bar, Round, Plate, Rect Tube|ASTM A572 Gr.50|
 Carbon Steel|Bar, Round, Plate|ASTM A572 Gr.65|
@@ -24,8 +26,13 @@ Carbon Steel|Bar, Round, Plate|ASTM A529 Gr.50|
 Carbon Steel|Bar, Round, Plate|ASTM A529 Gr.55|
 Carbon Steel|Wide Flange Beam|ASTM A992|
 Carbon Steel|Rect Tubes|ASTM A1085|
-Aluminum|Angle, Channel, Wide Flange Beam, Plate, Rect Tube, Round Tube, Pipe, Bar, Round|6061-T6|
-Aluminum|Plate|5052-H32|Used for formed plate. Significantly weaker than 6061-T6, especially when welded.
-UHMW|Plate, Bar, Round|White|
-UHMW|Plate, Bar, Round|Black|
-UHMW|Plate, Bar, Round|Blue|
+Aluminum|Angle, Channel, Wide Flange Beam, Plate, Rect Tube, Round Tube, Pipe, Bar, Round, Sheet|6061-T6|
+Aluminum|Angle, Channel, Wide Flange Beam, Plate, Rect Tube, Round Tube, Pipe, Bar, Round, Sheet|7075-T6|
+Aluminum|Plate, Sheet|5052-H32|Used for formed sheet operations. Significantly weaker than 6061-T6, especially when welded.|
+UHMW|Sheet, Bar, Round|White|
+UHMW|Sheet, Bar, Round|Black|
+UHMW|Sheet, Bar, Round|Blue|
+Delrin|Plate, Bar, Round, Sheet|Black|
+Plywood|Sheet|Fin|
+Plywood|Sheet|Shop|
+Plywood|Sheet|MDF|

@@ -58,6 +58,7 @@ Partial Class frmMaterialSpec
         Me.cbDescr = New System.Windows.Forms.ComboBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Label3 = New System.Windows.Forms.Label()
+        Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         CType(Me.nudD3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nudD2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nudD1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -376,9 +377,9 @@ Partial Class frmMaterialSpec
         Me.GroupBox1.Controls.Add(Me.lblD3)
         Me.GroupBox1.Controls.Add(Me.cbDescr)
         Me.GroupBox1.Location = New System.Drawing.Point(24, 103)
-        Me.GroupBox1.Margin = New System.Windows.Forms.Padding(5, 5, 5, 5)
+        Me.GroupBox1.Margin = New System.Windows.Forms.Padding(5)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Padding = New System.Windows.Forms.Padding(5, 5, 5, 5)
+        Me.GroupBox1.Padding = New System.Windows.Forms.Padding(5)
         Me.GroupBox1.Size = New System.Drawing.Size(2051, 730)
         Me.GroupBox1.TabIndex = 157
         Me.GroupBox1.TabStop = False
@@ -433,7 +434,7 @@ Partial Class frmMaterialSpec
         '
         Me.tbCustomMaterial.Enabled = False
         Me.tbCustomMaterial.Location = New System.Drawing.Point(392, 656)
-        Me.tbCustomMaterial.Margin = New System.Windows.Forms.Padding(5, 5, 5, 5)
+        Me.tbCustomMaterial.Margin = New System.Windows.Forms.Padding(5)
         Me.tbCustomMaterial.Name = "tbCustomMaterial"
         Me.tbCustomMaterial.ReadOnly = True
         Me.tbCustomMaterial.Size = New System.Drawing.Size(1071, 38)
@@ -444,7 +445,7 @@ Partial Class frmMaterialSpec
         Me.rbCustomMaterial.AutoSize = True
         Me.rbCustomMaterial.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.rbCustomMaterial.Location = New System.Drawing.Point(11, 649)
-        Me.rbCustomMaterial.Margin = New System.Windows.Forms.Padding(5, 5, 5, 5)
+        Me.rbCustomMaterial.Margin = New System.Windows.Forms.Padding(5)
         Me.rbCustomMaterial.Name = "rbCustomMaterial"
         Me.rbCustomMaterial.Size = New System.Drawing.Size(335, 46)
         Me.rbCustomMaterial.TabIndex = 158
@@ -457,7 +458,7 @@ Partial Class frmMaterialSpec
         Me.rbStandardMaterial.Checked = True
         Me.rbStandardMaterial.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.rbStandardMaterial.Location = New System.Drawing.Point(16, 41)
-        Me.rbStandardMaterial.Margin = New System.Windows.Forms.Padding(5, 5, 5, 5)
+        Me.rbStandardMaterial.Margin = New System.Windows.Forms.Padding(5)
         Me.rbStandardMaterial.Name = "rbStandardMaterial"
         Me.rbStandardMaterial.Size = New System.Drawing.Size(562, 46)
         Me.rbStandardMaterial.TabIndex = 157
@@ -469,7 +470,7 @@ Partial Class frmMaterialSpec
         '
         Me.cbDescr.FormattingEnabled = True
         Me.cbDescr.Location = New System.Drawing.Point(251, 522)
-        Me.cbDescr.Margin = New System.Windows.Forms.Padding(5, 5, 5, 5)
+        Me.cbDescr.Margin = New System.Windows.Forms.Padding(5)
         Me.cbDescr.Name = "cbDescr"
         Me.cbDescr.Size = New System.Drawing.Size(527, 39)
         Me.cbDescr.TabIndex = 163
@@ -561,4 +562,5 @@ Partial Class frmMaterialSpec
     Friend WithEvents Label2 As Windows.Forms.Label
     Friend WithEvents cbDescr As Windows.Forms.ComboBox
     Friend WithEvents btnAISCMaterialDB As Windows.Forms.Button
+    Friend WithEvents BackgroundWorker1 As ComponentModel.BackgroundWorker
 End Class

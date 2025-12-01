@@ -5,7 +5,7 @@
 *Notes lines begin with "*" All lines without an asterisk(*) will be read.
 *
 ARY (Adam R. Yeager)
-PAW  (Peter A. Woods)
+CPR (Cody Redding)
 KF  (Kevin Flagg)
 RH  (Ryan Hunter)
 SP  (Suzanna Paulos)

@@ -1,0 +1,2 @@
+﻿(get-item "Z:\PERMANENT INSTALL\Programming\TAIT PI Inventor Add-in\Add-In Program\TAITInventorAddIn\TAITInventorAddIn\bin\Debug\TAITInventorAddIn.dll").VersionInfo.FileVersion
+Copy-Item "Z:\PERMANENT INSTALL\Programming\TAIT PI Inventor Add-in\Add-In Program\TAITInventorAddIn\TAITInventorAddIn\bin\Debug\TAITInventorAddIn.dll" -Destination "Z:\PERMANENT INSTALL\Programming\TAIT PI Inventor Add-in\Add-In Program\Version Library\TAITInventorAddIn_Version $ver.dll"

@@ -98,13 +98,16 @@ Module Module1
 
         Catch ex As Exception
             Console.ForegroundColor = ConsoleColor.Red
-            Console.WriteLine("FAILED TO INSTALL/UPDATE. MAKE SURE INVENTOR APPLICAITON IS CLOSED AND TRY AGAIN")
+            Console.WriteLine("FAILED TO INSTALL/UPDATE. MAKE SURE INVENTOR APPLICATION IS CLOSED AND TRY AGAIN")
             Console.ResetColor()
         End Try
 
-        Console.WriteLine("COMPLETE. The install/update has completed." & vbCrLf & "Please close and reopen the Inventor application to confirm the update has been successful." & vbCrLf & "Press any key to exit.")
+        Console.WriteLine("COMPLETE. The install/update has completed." & vbCrLf & "Press any key to open Inventor.")
         Console.ReadLine()
         Console.ReadLine()
+
+
+
     End Sub
 
 End Module

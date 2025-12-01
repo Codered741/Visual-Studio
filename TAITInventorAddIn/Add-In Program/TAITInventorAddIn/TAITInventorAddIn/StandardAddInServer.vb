@@ -9,7 +9,7 @@ Imports System.IO
 Imports Microsoft.Office.Interop.Excel
 Imports Microsoft.Vbe.Interop
 Imports Microsoft.Office.Core
-Imports Microsoft.Win32
+Imports System.Drawing
 
 Namespace TAITInventorAddIn
     <ProgIdAttribute("TAITInventorAddIn.StandardAddInServer"),
@@ -42,7 +42,12 @@ Namespace TAITInventorAddIn
 
         Public WithEvents PropertyConfigForm As frmPropConfig
         Public WithEvents MaterialSpecForm As frmMaterialSpec
+        Public WithEvents oWindow As DockableWindow
 
+
+        <DllImport("user32.dll", EntryPoint:="FindWindowW")>
+        Public Shared Function FindWindowW(<MarshalAs(UnmanagedType.LPTStr)> ByVal lpClassName As String, <MarshalAs(UnmanagedType.LPTStr)> ByVal lpWindowName As String) As IntPtr
+        End Function
 
 #Region "ApplicationAddInServer Members"
 
@@ -50,6 +55,10 @@ Namespace TAITInventorAddIn
         ' to the Inventor Application object. The FirstTime flag indicates if the AddIn is loaded for
         ' the first time. However, with the introduction of the ribbon this argument is always true.
         Public Sub Activate(ByVal addInSiteObject As Inventor.ApplicationAddInSite, ByVal firstTime As Boolean) Implements Inventor.ApplicationAddInServer.Activate
+
+            'CHECK FOR UPDATED VERSION
+            'Call updateversion()
+
             ' Initialize AddIn members.
             g_inventorApplication = addInSiteObject.Application
 
@@ -62,7 +71,7 @@ Namespace TAITInventorAddIn
             'Create the Add-In info Specification button definition.
             Dim largeinfoIcon As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(My.Resources.info_icon_wZA_icon)
             Dim smallinfoIcon As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(My.Resources.info_icon_wZA_icon)
-            BtnAddinInformation = controlDefs.AddButtonDefinition("Add-In Info", "INFO_BUTTON", CommandTypesEnum.kShapeEditCmdType, AddInClientID, "Find out more info about the TAIT PI Inventor Add-in.", "Display the version number of the TAIT PI Inventor Add-In.", smallinfoIcon, largeinfoIcon, ButtonDisplayEnum.kAlwaysDisplayText)
+            BtnAddinInformation = controlDefs.AddButtonDefinition("Version" & vbNewLine & "Manager", "INFO_BUTTON", CommandTypesEnum.kShapeEditCmdType, AddInClientID, "Find out more info about the TAIT PI Inventor Add-in.", "Display the version number of the TAIT PI Inventor Add-In.", smallinfoIcon, largeinfoIcon, ButtonDisplayEnum.kAlwaysDisplayText)
 
             'Create the Material Specification button definition.
             Dim largematerialIcon As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(My.Resources._164934_200_JQM_icon)
@@ -97,7 +106,7 @@ Namespace TAITInventorAddIn
             'Create the Batch Change button definition.
             Dim largeBatchChangeicon As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(My.Resources.friendlyasm2_A3o_icon)
             Dim smallBatchChangeicon As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(My.Resources.friendlyasm2_A3o_icon)
-            BtnBatchChange = controlDefs.AddButtonDefinition("Batch Dwg Change", "BATCH_CHANGE_BUTTON", CommandTypesEnum.kShapeEditCmdType, AddInClientID, "Controller for performing batch change procedures for all assembly components.", "Opens the Batch Change interface.", smallBatchChangeicon, largeBatchChangeicon, ButtonDisplayEnum.kAlwaysDisplayText)
+            BtnBatchChange = controlDefs.AddButtonDefinition("Batch Prop Change", "BATCH_CHANGE_BUTTON", CommandTypesEnum.kShapeEditCmdType, AddInClientID, "Controller for performing batch change procedures for all assembly components.", "Opens the Batch Change interface.", smallBatchChangeicon, largeBatchChangeicon, ButtonDisplayEnum.kAlwaysDisplayText)
 
             'Create the Props Config button definition.
             Dim largePropsConfigicon As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(My.Resources.propconfig_c3T_icon)
@@ -184,7 +193,7 @@ Namespace TAITInventorAddIn
             RemoveHandler BtnDockableForm.OnExecute, AddressOf BtnDockableForm_Clicked
             Marshal.ReleaseComObject(BtnDockableForm)
             BtnDockableForm = Nothing
-
+            oWindow = Nothing
 
             System.GC.Collect()
             System.GC.WaitForPendingFinalizers()
@@ -222,32 +231,27 @@ Namespace TAITInventorAddIn
             Dim TAITZeroDocTab As Inventor.RibbonTab = zeroRibbon.RibbonTabs.Add("TAIT PI", "TAIT_TAB", AddInClientID)
 
             ' Create a panel for Version Info.
-            Dim InfozeroPanel As RibbonPanel = TAITZeroDocTab.RibbonPanels.Add("Add-in Version Info", "INFO_PANEL", AddInClientID)
+            Dim InfozeroPanel As RibbonPanel = TAITZeroDocTab.RibbonPanels.Add("Add-in Info", "INFO_PANEL", AddInClientID)
             ' Add  buttons.
             InfozeroPanel.CommandControls.AddButton(BtnAddinInformation, True, True)
 
-            ' Create a new panel for testing.
-            Dim TESTpanel1 As RibbonPanel = TAITZeroDocTab.RibbonPanels.Add("Test Panel 1", "TEST_PANEL1", AddInClientID)
-            ' Add buttons.
-            TESTpanel1.CommandControls.AddButton(BtnTestVaultConn, True, True)
-            TESTpanel1.CommandControls.AddButtonPopup(ctrlDefs, True, True)
+            '' Create a new panel for testing.
+            'Dim TESTpanel1 As RibbonPanel = TAITZeroDocTab.RibbonPanels.Add("Test Panel 1", "TEST_PANEL1", AddInClientID)
+            '' Add buttons.
+            'TESTpanel1.CommandControls.AddButton(BtnTestVaultConn, True, True)
+            'TESTpanel1.CommandControls.AddButtonPopup(ctrlDefs, True, True)
 
-            ' Create a new panel for testing.
-            Dim TESTpanel2 As RibbonPanel = TAITZeroDocTab.RibbonPanels.Add("Test Panel 2", "TEST_PANEL2", AddInClientID)
-            ' Add buttons.
-            TESTpanel2.CommandControls.AddTogglePopup(_ctrlDef1, ctrlDefs, True, True)
-
-            ' Create a new panel for testing.
-            Dim TESTpanel3 As RibbonPanel = TAITZeroDocTab.RibbonPanels.Add("Test Panel 3", "TEST_PANEL3", AddInClientID)
-            ' Add buttons.
-            TESTpanel3.CommandControls.AddButton(BtnDockableForm, True, True)
+            '' Create a new panel for testing.
+            'Dim TESTpanel2 As RibbonPanel = TAITZeroDocTab.RibbonPanels.Add("Test Panel 2", "TEST_PANEL2", AddInClientID)
+            '' Add buttons.
+            'TESTpanel2.CommandControls.AddTogglePopup(_ctrlDef1, ctrlDefs, True, True)
 
             ''''''''PART ENVIRONMENT'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
             'Create the "TAIT PI" tab in the Part environment
             Dim TAITPartTab As Inventor.RibbonTab = partRibbon.RibbonTabs.Add("TAIT PI", "TAIT_TAB", AddInClientID)
 
             ' Create a panel for Version Info.
-            Dim InfopartPanel As RibbonPanel = TAITPartTab.RibbonPanels.Add("Add-in Version Info", "INFO_PANEL", AddInClientID)
+            Dim InfopartPanel As RibbonPanel = TAITPartTab.RibbonPanels.Add("Add-in Info", "INFO_PANEL", AddInClientID)
             ' Add  buttons.
             InfopartPanel.CommandControls.AddButton(BtnAddinInformation, True, True)
 
@@ -265,22 +269,26 @@ Namespace TAITInventorAddIn
             Dim PartDesignToolsPanel As RibbonPanel = TAITPartTab.RibbonPanels.Add("Design Tools", "D_T_PANEL", AddInClientID)
             ' Add buttons.
             PartDesignToolsPanel.CommandControls.AddButton(BtnEngrSpreadsheets, True, True)
+            ' Create a new panel for testing.
+            Dim TESTpanel3 As RibbonPanel = TAITPartTab.RibbonPanels.Add("Test Panel 3", "TEST_PANEL3", AddInClientID)
+            ' Add buttons.
+            TESTpanel3.CommandControls.AddButton(BtnDockableForm, True, True)
 
             ''''''''ASSEMBLY ENVIRONMENT''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
             'Create the "TAIT PI" tab in the Assembly environment
             Dim TAITAsmTab As Inventor.RibbonTab = assemblyRibbon.RibbonTabs.Add("TAIT PI", "TAIT_TAB", AddInClientID)
 
             ' Create a panel for Version Info.
-            Dim InfoasmPanel As RibbonPanel = TAITAsmTab.RibbonPanels.Add("Add-in Version Info", "INFO_PANEL", AddInClientID)
+            Dim InfoasmPanel As RibbonPanel = TAITAsmTab.RibbonPanels.Add("Add-in Info", "INFO_PANEL", AddInClientID)
             ' Add buttons.
             InfoasmPanel.CommandControls.AddButton(BtnAddinInformation, True, True)
 
             ' Create a panel for Drawing tools.
             Dim AsmDrawingToolsPanel As RibbonPanel = TAITAsmTab.RibbonPanels.Add("Drawing Tools", "ASM_DWG_TOOLS_PANEL", AddInClientID)
             ' Add buttons.
-            AsmDrawingToolsPanel.CommandControls.AddButton(BtnGenerateDwgTree, True, True)
-            AsmDrawingToolsPanel.CommandControls.AddButton(BtnFindDrawings, True, True)
-            AsmDrawingToolsPanel.CommandControls.AddButton(BtnPrintDrawings, True, True)
+            'AsmDrawingToolsPanel.CommandControls.AddButton(BtnGenerateDwgTree, True, True)
+            'AsmDrawingToolsPanel.CommandControls.AddButton(BtnFindDrawings, True, True)
+            'AsmDrawingToolsPanel.CommandControls.AddButton(BtnPrintDrawings, True, True)
 
             ' Create a panel for design tools.
             Dim AsmDesignToolsPanel As RibbonPanel = TAITAsmTab.RibbonPanels.Add("Design Tools", "D_T_PANEL", AddInClientID)
@@ -300,7 +308,7 @@ Namespace TAITInventorAddIn
             Dim TAITDwgTab As Inventor.RibbonTab = drawingRibbon.RibbonTabs.Add("TAIT PI", "TAIT_TAB", AddInClientID)
 
             ' Create a panel for Version Info.
-            Dim InfodwgPanel As RibbonPanel = TAITDwgTab.RibbonPanels.Add("Add-in Version Info", "INFO_PANEL", AddInClientID)
+            Dim InfodwgPanel As RibbonPanel = TAITDwgTab.RibbonPanels.Add("Add-in Info", "INFO_PANEL", AddInClientID)
             ' Add buttons.
             InfodwgPanel.CommandControls.AddButton(BtnAddinInformation, True, True)
 
@@ -308,13 +316,13 @@ Namespace TAITInventorAddIn
             Dim DrawingToolsPanel As RibbonPanel = TAITDwgTab.RibbonPanels.Add("Drawing Tools", "DWG_TOOLS_PANEL", AddInClientID)
             ' Add buttons.
             DrawingToolsPanel.CommandControls.AddButton(BtnModifyDwgNotes, True, True)
-            DrawingToolsPanel.CommandControls.AddButton(BtnMKApplyDwgTemplate, True, True)
-            DrawingToolsPanel.CommandControls.AddButton(BtnKAPPAApplyDwgTemplate, True, True)
+            'DrawingToolsPanel.CommandControls.AddButton(BtnMKApplyDwgTemplate, True, True)
+            'DrawingToolsPanel.CommandControls.AddButton(BtnKAPPAApplyDwgTemplate, True, True)
 
             'Create a panel for Drawing References
             Dim DrawingRefsPanel As RibbonPanel = TAITDwgTab.RibbonPanels.Add("Drawing References", "DWG_REFS_PANEL", AddInClientID)
             ' Add buttons.
-            DrawingRefsPanel.CommandControls.AddButton(BtnMKDwgRef, False, True)
+            'DrawingRefsPanel.CommandControls.AddButton(BtnMKDwgRef, False, True)
             DrawingRefsPanel.CommandControls.AddButton(BtnStdFasteners, True, True)
 
         End Sub
@@ -327,7 +335,7 @@ Namespace TAITInventorAddIn
             MaterialSpecForm.ShowDialog()
         End Sub
         Private Sub BtnAddinInformation_OnExecute(Context As NameValueMap) Handles BtnAddinInformation.OnExecute
-            Dim InfoForm As New frmVersionInfo 'Launch the frmVersionInfo form when the button is clicked.
+            Dim InfoForm As New frmVersionManager 'Launch the frmVersionManager form when the button is clicked.
             InfoForm.ShowDialog()
         End Sub
         Private Sub BtnGenerateDwgTree_OnExecute(Context As NameValueMap) Handles BtnGenerateDwgTree.OnExecute
@@ -340,10 +348,10 @@ Namespace TAITInventorAddIn
             oDoc = g_inventorApplication.ActiveDocument
 
             Dim RUsure As Boolean
-            RUsure = MessageBox.Show("This will create a TXT file for all of the assembly components that don't have drawings files." _
+            RUsure = MessageBox.Show("This will create a .txt file for all of the assembly components that don't have drawings files(.idw and .dwg)." _
                 & vbLf & "This rule expects that the drawing file shares the same name and location as the component." _
                 & vbLf & " " _
-                & vbLf & "Are you sure you want to create TXT for all of the assembly components?", "Drawing Check  - Batch Output .txt ", MessageBoxButtons.YesNo)
+                & vbLf & "Are you sure you want to create .txt for all of the assembly components without drawings?", "Drawing Check  - Batch Output .txt ", MessageBoxButtons.YesNo)
             If RUsure = vbNo Then
                 Exit Sub
             End If
@@ -377,13 +385,15 @@ Namespace TAITInventorAddIn
             Dim n As Integer
             Dim partnumber As String
             Dim idwPathName As String
+            Dim dwgPathName As String
             Dim result As String
 
             For Each oRefDoc In oRefDocs
-                idwPathName = Left(oRefDoc.FullDocumentName, Len(oRefDoc.FullDocumentName) - 3) & "dwg"
+                idwPathName = Left(oRefDoc.FullDocumentName, Len(oRefDoc.FullDocumentName) - 3) & "idw"
+                dwgPathName = Left(oRefDoc.FullDocumentName, Len(oRefDoc.FullDocumentName) - 3) & "dwg"
                 'MsgBox(idwPathName)
                 'check to see that the model has a drawing of the same path and name 
-                If (System.IO.File.Exists(idwPathName)) = 0 Then                                                'check for drawing with same name in same location (Local VaultWIP location)
+                If (System.IO.File.Exists(idwPathName)) = 0 Or (System.IO.File.Exists(dwgPathName)) = 0 Then                                                'check for drawing with same name in same location (Local VaultWIP location)
 
                     If oRefDoc.FullDocumentName.Contains("Design Accelerator") Then
                         GoTo SKIP
@@ -392,7 +402,7 @@ Namespace TAITInventorAddIn
                     partnumbersplit = oRefDoc.FullFileName
                     stringarray = partnumbersplit.Split("\")
                     n = -1
-                    For Each txt In stringarray
+                    For Each txt As String In stringarray
                         n += 1
                     Next
                     partnumber = stringarray(n)
@@ -428,6 +438,10 @@ SKIP:
                 printDXF = BatchPrintForm.cbPrintDXF.Checked
                 canceled = BatchPrintForm.cbCancel.Checked
             End Using
+
+            If canceled = True Then
+                Exit Sub
+            End If
 
             'MsgBox("PDF = " & printPDF.ToString & vbNewLine &
             '       "DWG = " & printDWG.ToString & vbNewLine &
@@ -953,6 +967,7 @@ SKIP:
             Dim inputINFOpartnumber As Object
             Dim inputINFOtitle As Object
             Dim oShp As Microsoft.Office.Interop.Excel.Shape
+            Dim i As Integer
 
             inputINFOpartnumber = RootNumber
             'inputINFOpartnumber = InputBox("Please input the Element Part Number")
@@ -1057,14 +1072,14 @@ NXT:
             'MsgBox ("Level: " & lengthOfArray & vbNewLine & "Next Level: " & lengthOfArrayNext)
             If lengthOfArrayNext > lengthOfArray Then           'keep going down
                 LastNode = ParNode
-                ParNode = QNode
+                ParNode = Qnode
             ElseIf lengthOfArrayNext < lengthOfArray Then       'go back up a level
                 ParNode = LastNode
             End If
 
         End Sub
         Private Sub BtnBatchChange_OnExecute(Context As NameValueMap) Handles BtnBatchChange.OnExecute
-            Dim BatchChangeform As New frmBatchChange 'Launch the frmSmartPartPRO form when the button is clicked.
+            Dim BatchChangeform As New frmBatchChange 'Launch the batch change property form when the button is clicked.
             BatchChangeform.ShowDialog()
         End Sub
         Public Sub BtnPropConfig_OnExecute(Context As NameValueMap) Handles BtnPropConfig.OnExecute
@@ -1261,11 +1276,88 @@ NXT:
         Private Sub Button3_Clicked(ByVal context As NameValueMap) Handles _ctrlDef3.OnExecute
             MsgBox("Button 3 was clicked.")
         End Sub
-        Private Sub BtnDockableForm_Clicked(ByVal context As NameValueMap) Handles BtnDockableForm.OnExecute
+        Public Sub BtnDockableForm_Clicked(ByVal context As NameValueMap) Handles BtnDockableForm.OnExecute
             MsgBox("Opening Dockable form...")
-            Dim f As DockForm = New DockForm(g_inventorApplication, AddInClientID)
-            f.ShowDialog()
-            MsgBox("Dockable form opened.")
+
+            Dim oUserInterfaceMgr As UserInterfaceManager
+            oUserInterfaceMgr = g_inventorApplication.UserInterfaceManager
+
+            ' Create a new dockable window
+            Dim oWindow As Inventor.DockableWindow
+            oWindow = oUserInterfaceMgr.DockableWindows.Add(AddInClientID, "TestWindowInternalName", "Test Window Displayed Name")
+            MsgBox("HIT 1")
+            Dim Childform As New DockForm
+
+            MsgBox("HIT 2")
+            Try
+                'MsgBox("Get_hWnd(Childform.Text) result: " & Get_hWnd(Childform.Text))
+                oWindow.AddChild(Get_hWnd(Childform.Text))
+                'MsgBox("Child Added")
+
+                Childform.FormBorderStyle = BorderStyle.FixedSingle
+                MsgBox("Childform border set.")
+                Childform.Dock = DockStyle.Fill
+                MsgBox("Childform dock style set.")
+                Childform.Visible = True
+                MsgBox("Childform Parent: " & Childform.Parent.Text & vbNewLine &
+                   "Showing childform:")
+                Childform.Show()
+
+                MsgBox("Displaying Dockable Form...")
+
+                oWindow.ShowTitleBar = True
+                oWindow.DockingState = DockingStateEnum.kDockRight
+                oWindow.ShowVisibilityCheckBox = True
+                oWindow.Visible = True
+
+            Catch ex As Exception
+                MsgBox("Child form creation failure.")
+            End Try
+
+        End Sub
+        Public Function Get_hWnd(mCaption As String) As Long
+            Dim hWnd As Long
+            hWnd = FindWindowW(vbNullString, mCaption)
+            Get_hWnd = hWnd
+            'MsgBox("hWnd result: " & Get_hWnd)
+        End Function
+
+    End Class
+
+    Class CSharpImpl
+        <Obsolete("Please refactor calling code to use normal Visual Basic assignment")>
+        Shared Function __Assign(Of T)(ByRef target As T, value As T) As T
+            target = value
+            Return value
+        End Function
+
+        Sub updateversion()
+            Dim source1 As String = "Z:\PERMANENT INSTALL\Programming\TAIT PI Inventor Add-in\Add-In Program\TAITInventorAddIn\TAITInventorAddIn\Autodesk.TAITInventorAddIn.Inventor.addin"
+            Dim target1 As String = "C:\Users\" & System.Environment.UserName & "\AppData\Roaming\Autodesk\ApplicationPlugins\TAITInventorAddIn\Autodesk.TAITInventorAddIn.Inventor.addin"
+            Dim source2 As String = "Z:\PERMANENT INSTALL\Programming\TAIT PI Inventor Add-in\Add-In Program\TAITInventorAddIn\TAITInventorAddIn\bin\Debug\TAITInventorAddIn.dll"
+            Dim target2 As String = "C:\Users\" & System.Environment.UserName & "\AppData\Roaming\Autodesk\ApplicationPlugins\TAITInventorAddIn\TAITInventorAddIn.dll"
+            Dim OGdate As Date
+            Dim NEWdate As Date
+            'OGdate = My.Computer.FileSystem.GetFileInfo(target2).LastWriteTime
+            'NEWdate = My.Computer.FileSystem.GetFileInfo(source2).LastWriteTime
+            'MsgBox("OGdate: " & OGdate & vbNewLine &
+            '      "NEWdate: " & NEWdate)
+
+            Try
+                If My.Computer.FileSystem.FileExists(target1) Then
+                    OGdate = My.Computer.FileSystem.GetFileInfo(target1).LastWriteTime
+                    NEWdate = My.Computer.FileSystem.GetFileInfo(source1).LastWriteTime
+
+                    If NEWdate > OGdate Then
+                        MsgBox("New version of TAIT PI Inventor AddIn available!" & vbNewLine & "Close Inventor and run ")
+                        My.Computer.FileSystem.CopyFile(source1, target1, True)
+
+                    End If
+                End If
+            Catch
+
+            End Try
+
         End Sub
 #End Region
     End Class

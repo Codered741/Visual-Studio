@@ -33,6 +33,7 @@ Public Class frmModifyDwgNotes
             For x As Integer = 0 To notes.GetUpperBound(0)
                 notesarray.Add(notes(x))
             Next
+            Dim n As Integer
             For n = 0 To notesarray.Count - 1
                 If notesarray.Item(n) = "" Then
                     GoTo NXTnote

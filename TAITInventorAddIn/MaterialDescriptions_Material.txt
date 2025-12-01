@@ -2,3 +2,5 @@ Stainless Steel
 Carbon Steel
 Aluminum
 UHMW
+Delrin
+Plywood

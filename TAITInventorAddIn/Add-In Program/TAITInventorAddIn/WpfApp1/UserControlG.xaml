@@ -5,9 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfApp1"
              mc:Ignorable="d" 
-             d:DesignHeight="153.782" d:DesignWidth="275.63">
-    <Grid Background="White">
-        <Button Content="Button" HorizontalAlignment="Left" Margin="45,83,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-
+             d:DesignHeight="285.494" d:DesignWidth="377.807">
+    <Grid Background="White" Margin="0,0,-104.4,-133.4" RenderTransformOrigin="0.497,0.57" Height="287" VerticalAlignment="Top" HorizontalAlignment="Left" Width="380">
+        <Label Content="Label" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.508,0.541"/>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="53,12,0,0" VerticalAlignment="Top" Width="75" Height="23"/>
+        <TextBox HorizontalAlignment="Left" Height="27" Margin="10,41,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="300"/>
     </Grid>
 </UserControl>

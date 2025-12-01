@@ -1,4 +1,5 @@
 ﻿Imports Inventor
+Imports System.Collections.Generic
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
 
@@ -7,7 +8,36 @@ Public Class frmPropConfig
     Dim SummaryPropSet As PropertySet
     Dim CustomPropSet As PropertySet
     Public MaterialDescription As String
+
+    Dim tblist_IssueID As New List(Of Windows.Forms.TextBox)
+    Dim tblist_IssueDATE As New List(Of Windows.Forms.TextBox)
+    Dim tblist_IssuedBY As New List(Of Windows.Forms.TextBox)
+    Dim tblist_IssuedFOR As New List(Of Windows.Forms.TextBox)
+    Dim tblist_RevID As New List(Of Windows.Forms.TextBox)
+    Dim tblist_RevDATE As New List(Of Windows.Forms.TextBox)
+    Dim tblist_RevBY As New List(Of Windows.Forms.TextBox)
+    Dim tblist_RevDESCRIPTION As New List(Of Windows.Forms.TextBox)
+    Dim tblist_RevAPPROVEDBY As New List(Of Windows.Forms.TextBox)
+
+
+
     Public Sub frmPropConfig_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Me.Height = 320
+        Me.Width = 826
+        gbIssues.Visible = False
+        gbRevisions.Visible = False
+
+        tblist_IssueID.AddRange({Issue_ID1, Issue_ID2, Issue_ID3, Issue_ID4, Issue_ID5, Issue_ID6, Issue_ID7, Issue_ID8})
+        tblist_IssueDATE.AddRange({IssuedDate1, IssuedDate2, IssuedDate3, IssuedDate4, IssuedDate5, IssuedDate6, IssuedDate7, IssuedDate8})
+        tblist_IssuedBY.AddRange({IssuedBy1, IssuedBy2, IssuedBy3, IssuedBy4, IssuedBy5, IssuedBy6, IssuedBy7, IssuedBy8})
+        tblist_IssuedFOR.AddRange({IssuedFor1, IssuedFor2, IssuedFor3, IssuedFor4, IssuedFor5, IssuedFor6, IssuedFor7, IssuedFor8})
+
+        tblist_RevID.AddRange({Rev_ID1, Rev_ID2, Rev_ID3, Rev_ID4, Rev_ID5, Rev_ID6, Rev_ID7, Rev_ID8})
+        tblist_RevDATE.AddRange({RevDate1, RevDate2, RevDate3, RevDate4, RevDate5, RevDate6, RevDate7, RevDate8})
+        tblist_RevBY.AddRange({RevBy1, RevBy2, RevBy3, RevBy4, RevBy5, RevBy6, RevBy7, RevBy8})
+        tblist_RevDESCRIPTION.AddRange({RevDescription1, RevDescription2, RevDescription3, RevDescription4, RevDescription5, RevDescription6, RevDescription7, RevDescription8})
+        tblist_RevAPPROVEDBY.AddRange({RevApprovedBy1, RevApprovedBy2, RevApprovedBy3, RevApprovedBy4, RevApprovedBy5, RevApprovedBy6, RevApprovedBy7, RevApprovedBy8})
+
         ' Connect to a running instance of Inventor. 
         Dim invApp As Inventor.Application
         invApp = System.Runtime.InteropServices.Marshal.GetActiveObject("Inventor.Application")
@@ -132,6 +162,45 @@ Public Class frmPropConfig
             tbMaterial.Text = ""
         End Try
 
+        'load the issues information. Finds it if it can, otherwise sets the form up to enter info.
+        Dim x As Integer
+        For x = 0 To 7
+            Try
+                If CustomPropSet.Item("ISSUED " & x + 1 & " DATE").Value.ToString <> "" Then
+                    tblist_IssueDATE.Item(x).Text = CustomPropSet.Item("ISSUED " & x + 1 & " DATE").Value.ToString
+                    tblist_IssueDATE.Item(x).Enabled = True
+                    tblist_IssuedBY.Item(x).Text = CustomPropSet.Item("ISSUED " & x + 1 & " BY").Value.ToString
+                    tblist_IssuedBY.Item(x).Enabled = True
+                    tblist_IssuedFOR.Item(x).Text = CustomPropSet.Item("ISSUED " & x + 1 & " FOR").Value.ToString
+                    tblist_IssuedFOR.Item(x).Enabled = True
+                    tblist_IssueID.Item(x).Text = x + 1
+                End If
+            Catch ex As Exception
+                'MsgBox("HIT CATCH. x = " & x)
+                Exit For
+            End Try
+        Next
+
+        'load the rev information. Finds it if it can, otherwise sets the form up to enter info.
+        For x = 0 To 7
+            Try
+                If CustomPropSet.Item("REV " & x + 1 & " DATE").Value.ToString <> "" Then
+                    tblist_RevDATE.Item(x).Text = CustomPropSet.Item("REV " & x + 1 & " DATE").Value.ToString
+                    tblist_RevDATE.Item(x).Enabled = True
+                    tblist_RevBY.Item(x).Text = CustomPropSet.Item("REV " & x + 1 & " BY").Value.ToString
+                    tblist_RevBY.Item(x).Enabled = True
+                    tblist_RevDESCRIPTION.Item(x).Text = CustomPropSet.Item("REV " & x + 1 & " DESCRIPTION").Value.ToString
+                    tblist_RevDESCRIPTION.Item(x).Enabled = True
+                    tblist_RevAPPROVEDBY.Item(x).Text = CustomPropSet.Item("REV " & x + 1 & " APPROVED BY").Value.ToString
+                    tblist_RevAPPROVEDBY.Item(x).Enabled = True
+                    tblist_RevID.Item(x).Text = x + 1
+                End If
+            Catch ex As Exception
+                'MsgBox("HIT CATCH. x = " & x)
+                Exit For
+            End Try
+        Next
+
         invApp = Nothing
         Doc = Nothing
 
@@ -152,16 +221,18 @@ Public Class frmPropConfig
                 projectlist.Add(Projects(p))
             Next
 
-            Dim X(1) As String
+
             Dim XProject As String
             Dim XElement As String
+            Dim n As Integer
             For n = 0 To projectlist.Count - 1
                 If projectlist.Item(n).ToString.Substring(0, 1) = "*" Then
                     GoTo nOBJ
                 End If
-                X = projectlist.Item(n).ToString.Split("|")
-                XProject = X(0)
-                XElement = X(1)
+                Dim T(1) As String
+                T = projectlist.Item(n).ToString.Split("|")
+                XProject = T(0)
+                XElement = T(1)
 
                 cmbProjects.Items.Add(XProject)
 nOBJ:
@@ -184,6 +255,7 @@ nOBJ:
             Next
 
             Dim XDesigner As String
+            Dim n As Integer
             For n = 0 To designerlist.Count - 1
                 If designerlist.Item(n).ToString.Substring(0, 1) = "*" Then
                     GoTo nOBJd
@@ -210,6 +282,7 @@ nOBJd:
             Next
 
             Dim XApprover As String
+            Dim n As Integer
             For n = 0 To approverlist.Count - 1
                 If approverlist.Item(n).ToString.Substring(0, 1) = "*" Then
                     GoTo nOBJa
@@ -241,6 +314,7 @@ nOBJa:
             Dim X(1) As String
             Dim XProject As String
             Dim XElement As String
+            Dim n As Integer
             For n = 0 To elementlist.Count - 1
                 If elementlist.Item(n).ToString.Substring(0, 1) = "*" Then
                     GoTo nOBJ
@@ -251,6 +325,7 @@ nOBJa:
                 If ProjectChosen = XProject Then
                     XElement = X(1)
                     Dim m() As String
+                    Dim i As Integer
                     m = XElement.Split(",")
                     For i = 0 To m.Length - 1
                         cmbElements.Items.Add(m(i))
@@ -281,6 +356,7 @@ nOBJ:
             Dim XProjectName As String
             Dim XProjectNo As String
             Dim XBuildingNo As String
+            Dim n As Integer
             For n = 0 To elementdetailslist.Count - 1
                 If elementdetailslist.Item(n).ToString.Substring(0, 1) = "*" Then
                     GoTo nOBJ
@@ -309,7 +385,7 @@ nOBJ:
         ' Watch out for the wrapped line. 
         Dim invApp As Inventor.Application
         invApp = System.Runtime.InteropServices.Marshal.GetActiveObject("Inventor.Application")
-
+        Dim n As Integer
         ' Get the active document. 
         Dim Doc As Inventor.Document
         Doc = invApp.ActiveDocument
@@ -477,6 +553,134 @@ nOBJ:
             propVendor = StdPropSet.Add(tbVendor.Text, "Vendor")
         End Try
 
+        'Set new issue date custom properties
+        Dim propIssueDate1 As Inventor.Property = Nothing
+        Dim propIssueDate2 As Inventor.Property = Nothing
+        Dim propIssueDate3 As Inventor.Property = Nothing
+        Dim propIssueDate4 As Inventor.Property = Nothing
+        Dim propIssueDate5 As Inventor.Property = Nothing
+        Dim propIssueDate6 As Inventor.Property = Nothing
+        Dim propIssueDate7 As Inventor.Property = Nothing
+        Dim propIssueDate8 As Inventor.Property = Nothing
+        Dim proplist_IssueDATE As New List(Of Inventor.Property)({propIssueDate1, propIssueDate2, propIssueDate3, propIssueDate4, propIssueDate5, propIssueDate6, propIssueDate7, propIssueDate8})
+        For n = 0 To 7
+            Try
+                proplist_IssueDATE.Item(n) = CustomPropSet.Item("ISSUED " & n + 1 & " DATE")
+                proplist_IssueDATE.Item(n).Value = tblist_IssueDATE.Item(n).Text
+            Catch ex As Exception
+                proplist_IssueDATE.Item(n) = CustomPropSet.Add(tblist_IssueDATE.Item(n).Text, "ISSUED " & n + 1 & " DATE")
+            End Try
+        Next
+        'Set new issue by custom properties
+        Dim propIssueBy1 As Inventor.Property = Nothing
+        Dim propIssueBy2 As Inventor.Property = Nothing
+        Dim propIssueBy3 As Inventor.Property = Nothing
+        Dim propIssueBy4 As Inventor.Property = Nothing
+        Dim propIssueBy5 As Inventor.Property = Nothing
+        Dim propIssueBy6 As Inventor.Property = Nothing
+        Dim propIssueBy7 As Inventor.Property = Nothing
+        Dim propIssueBy8 As Inventor.Property = Nothing
+        Dim proplist_IssueBY As New List(Of Inventor.Property)({propIssueBy1, propIssueBy2, propIssueBy3, propIssueBy4, propIssueBy5, propIssueBy6, propIssueBy7, propIssueBy8})
+        For n = 0 To 7
+            Try
+                proplist_IssueBY.Item(n) = CustomPropSet.Item("ISSUED " & n + 1 & " BY")
+                proplist_IssueBY.Item(n).Value = tblist_IssuedBY.Item(n).Text
+            Catch ex As Exception
+                proplist_IssueBY.Item(n) = CustomPropSet.Add(tblist_IssuedBY.Item(n).Text, "ISSUED " & n + 1 & " BY")
+            End Try
+        Next
+        'Set new issue Date custom properties
+        Dim propIssueFor1 As Inventor.Property = Nothing
+        Dim propIssueFor2 As Inventor.Property = Nothing
+        Dim propIssueFor3 As Inventor.Property = Nothing
+        Dim propIssueFor4 As Inventor.Property = Nothing
+        Dim propIssueFor5 As Inventor.Property = Nothing
+        Dim propIssueFor6 As Inventor.Property = Nothing
+        Dim propIssueFor7 As Inventor.Property = Nothing
+        Dim propIssueFor8 As Inventor.Property = Nothing
+        Dim proplist_IssueFOR As New List(Of Inventor.Property)({propIssueFor1, propIssueFor2, propIssueFor3, propIssueFor4, propIssueFor5, propIssueFor6, propIssueFor7, propIssueFor8})
+        For n = 0 To 7
+            Try
+                proplist_IssueFOR.Item(n) = CustomPropSet.Item("ISSUED " & n + 1 & " FOR")
+                proplist_IssueFOR.Item(n).Value = tblist_IssuedFOR.Item(n).Text
+            Catch ex As Exception
+                proplist_IssueFOR.Item(n) = CustomPropSet.Add(tblist_IssuedFOR.Item(n).Text, "ISSUED " & n + 1 & " FOR")
+            End Try
+        Next
+
+        'Set new Rev date custom properties
+        Dim propRevDate1 As Inventor.Property = Nothing
+        Dim propRevDate2 As Inventor.Property = Nothing
+        Dim propRevDate3 As Inventor.Property = Nothing
+        Dim propRevDate4 As Inventor.Property = Nothing
+        Dim propRevDate5 As Inventor.Property = Nothing
+        Dim propRevDate6 As Inventor.Property = Nothing
+        Dim propRevDate7 As Inventor.Property = Nothing
+        Dim propRevDate8 As Inventor.Property = Nothing
+        Dim proplist_RevDATE As New List(Of Inventor.Property)({propRevDate1, propRevDate2, propRevDate3, propRevDate4, propRevDate5, propRevDate6, propRevDate7, propRevDate8})
+        For n = 0 To 7
+            Try
+                proplist_RevDATE.Item(n) = CustomPropSet.Item("REV " & n + 1 & " DATE")
+                proplist_RevDATE.Item(n).Value = tblist_RevDATE.Item(n).Text
+            Catch ex As Exception
+                proplist_RevDATE.Item(n) = CustomPropSet.Add(tblist_RevDATE.Item(n).Text, "REV " & n + 1 & " DATE")
+            End Try
+        Next
+        'Set new Rev by custom properties
+        Dim propRevBy1 As Inventor.Property = Nothing
+        Dim propRevBy2 As Inventor.Property = Nothing
+        Dim propRevBy3 As Inventor.Property = Nothing
+        Dim propRevBy4 As Inventor.Property = Nothing
+        Dim propRevBy5 As Inventor.Property = Nothing
+        Dim propRevBy6 As Inventor.Property = Nothing
+        Dim propRevBy7 As Inventor.Property = Nothing
+        Dim propRevBy8 As Inventor.Property = Nothing
+        Dim proplist_RevBy As New List(Of Inventor.Property)({propRevBy1, propRevBy2, propRevBy3, propRevBy4, propRevBy5, propRevBy6, propRevBy7, propRevBy8})
+        For n = 0 To 7
+            Try
+                proplist_RevBy.Item(n) = CustomPropSet.Item("REV " & n + 1 & " BY")
+                proplist_RevBy.Item(n).Value = tblist_RevBY.Item(n).Text
+            Catch ex As Exception
+                proplist_RevBy.Item(n) = CustomPropSet.Add(tblist_RevBY.Item(n).Text, "REV " & n + 1 & " BY")
+            End Try
+        Next
+        'Set new Rev Description custom properties
+        Dim propRevDescr1 As Inventor.Property = Nothing
+        Dim propRevDescr2 As Inventor.Property = Nothing
+        Dim propRevDescr3 As Inventor.Property = Nothing
+        Dim propRevDescr4 As Inventor.Property = Nothing
+        Dim propRevDescr5 As Inventor.Property = Nothing
+        Dim propRevDescr6 As Inventor.Property = Nothing
+        Dim propRevDescr7 As Inventor.Property = Nothing
+        Dim propRevDescr8 As Inventor.Property = Nothing
+        Dim proplist_RevDescr As New List(Of Inventor.Property)({propRevDescr1, propRevDescr2, propRevDescr3, propRevDescr4, propRevDescr5, propRevDescr6, propRevDescr7, propRevDescr8})
+        For n = 0 To 7
+            Try
+                proplist_RevDescr.Item(n) = CustomPropSet.Item("REV " & n + 1 & " DESCRIPTION")
+                proplist_RevDescr.Item(n).Value = tblist_RevDESCRIPTION.Item(n).Text
+            Catch ex As Exception
+                proplist_RevDescr.Item(n) = CustomPropSet.Add(tblist_RevDESCRIPTION.Item(n).Text, "REV " & n + 1 & " DESCRIPTION")
+            End Try
+        Next
+        'Set new Rev Approved By custom properties
+        Dim propRevApprovedBy1 As Inventor.Property = Nothing
+        Dim propRevApprovedBy2 As Inventor.Property = Nothing
+        Dim propRevApprovedBy3 As Inventor.Property = Nothing
+        Dim propRevApprovedBy4 As Inventor.Property = Nothing
+        Dim propRevApprovedBy5 As Inventor.Property = Nothing
+        Dim propRevApprovedBy6 As Inventor.Property = Nothing
+        Dim propRevApprovedBy7 As Inventor.Property = Nothing
+        Dim propRevApprovedBy8 As Inventor.Property = Nothing
+        Dim proplist_RevApprovedBy As New List(Of Inventor.Property)({propRevApprovedBy1, propRevApprovedBy2, propRevApprovedBy3, propRevApprovedBy4, propRevApprovedBy5, propRevApprovedBy6, propRevApprovedBy7, propRevApprovedBy8})
+        For n = 0 To 7
+            Try
+                proplist_RevApprovedBy.Item(n) = CustomPropSet.Item("REV " & n + 1 & " APPROVED BY")
+                proplist_RevApprovedBy.Item(n).Value = tblist_RevAPPROVEDBY.Item(n).Text
+            Catch ex As Exception
+                proplist_RevApprovedBy.Item(n) = CustomPropSet.Add(tblist_RevAPPROVEDBY.Item(n).Text, "REV " & n + 1 & " APPROVED BY")
+            End Try
+        Next
+
         Me.Close()
     End Sub
 
@@ -505,9 +709,9 @@ nOBJ:
         tbVendor.Text = "TAIT"
     End Sub
 
-    Public Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    Public Sub BtnMaterialSpecForm_Click(sender As Object, e As EventArgs) Handles BtnMaterialSpecForm.Click
         Dim MaterialSpecForm As New frmMaterialSpec 'Launch the frmMaterialSpec form when the button is clicked.
-        MaterialSpecForm.ShowDialog(Me)
+        MaterialSpecForm.ShowDialog()
 
         'Try
         '    MaterialDescription = CustomPropSet.Item("Material").Value.ToString
@@ -516,5 +720,80 @@ nOBJ:
         '    tbMaterial.Text = ""
         'End Try
 
+    End Sub
+
+    Public Sub IssuedDate1_DoubleClick(sender As Object, e As EventArgs) Handles IssuedDate1.DoubleClick, IssuedDate2.DoubleClick, IssuedDate3.DoubleClick, IssuedDate4.DoubleClick, IssuedDate5.DoubleClick, IssuedDate6.DoubleClick, IssuedDate7.DoubleClick, IssuedDate8.DoubleClick
+
+        'DTP_IssueRev.Location()
+
+    End Sub
+
+    Public Sub btnIssueRevDropdown_Click(sender As Object, e As EventArgs) Handles btnIssueRevDropdown.Click
+        If btnIssueRevDropdown.Text = "↑ Issues / Revisions ↑" Then
+            Me.Height = 320
+            Me.Width = 826
+            gbIssues.Visible = False
+            gbRevisions.Visible = False
+            btnIssueRevDropdown.Text = "↓ Issues / Revisions ↓"
+        Else
+            Me.Height = 880
+            Me.Width = 951
+            gbIssues.Visible = True
+            gbRevisions.Visible = True
+            btnIssueRevDropdown.Text = "↑ Issues / Revisions ↑"
+        End If
+    End Sub
+
+    Public Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles cbRevNo.CheckedChanged
+        If cbRevNo.Checked = True Then
+            tbRevNo.Enabled = False
+        Else
+            tbRevNo.Enabled = True
+        End If
+    End Sub
+
+    Public Sub btnUpIssue_Click(sender As Object, e As EventArgs) Handles btnUpIssue.Click
+
+        Dim i As Integer = 0
+        Dim m As Integer
+        For m = 0 To 7
+            Try
+                i = tblist_IssueID.Item(m).Text
+            Catch
+                Exit For
+            End Try
+        Next
+
+        If i = 8 Then
+            Exit Sub
+        End If
+
+        tblist_IssueID.Item(i).Text = i + 1
+        tblist_IssuedBY.Item(i).Enabled = True
+        tblist_IssueDATE.Item(i).Enabled = True
+        tblist_IssuedFOR.Item(i).Enabled = True
+
+    End Sub
+
+    Private Sub btnUpRev_Click(sender As Object, e As EventArgs) Handles btnUpRev.Click
+        Dim j As Integer = 0
+        Dim m As Integer
+        For m = 0 To 7
+            Try
+                j = tblist_RevID.Item(m).Text
+            Catch
+                Exit For
+            End Try
+        Next
+
+        If j = 8 Then
+            Exit Sub
+        End If
+
+        tblist_RevID.Item(j).Text = j + 1
+        tblist_RevBY.Item(j).Enabled = True
+        tblist_RevDATE.Item(j).Enabled = True
+        tblist_RevDESCRIPTION.Item(j).Enabled = True
+        tblist_RevAPPROVEDBY.Item(j).Enabled = True
     End Sub
 End Class

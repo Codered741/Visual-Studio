@@ -44,4 +44,5 @@
         cbCancel.Checked = False
         Me.Close()
     End Sub
+
 End Class

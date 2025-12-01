@@ -35,9 +35,10 @@ Partial Class frmBatchPrint
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(12, 9)
+        Me.Label1.Location = New System.Drawing.Point(9, 7)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(892, 102)
+        Me.Label1.Size = New System.Drawing.Size(673, 78)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = resources.GetString("Label1.Text")
         '
@@ -46,9 +47,10 @@ Partial Class frmBatchPrint
         Me.cbPrintDXF.AutoSize = True
         Me.cbPrintDXF.Checked = True
         Me.cbPrintDXF.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.cbPrintDXF.Location = New System.Drawing.Point(15, 168)
+        Me.cbPrintDXF.Location = New System.Drawing.Point(11, 136)
+        Me.cbPrintDXF.Margin = New System.Windows.Forms.Padding(2)
         Me.cbPrintDXF.Name = "cbPrintDXF"
-        Me.cbPrintDXF.Size = New System.Drawing.Size(57, 21)
+        Me.cbPrintDXF.Size = New System.Drawing.Size(47, 17)
         Me.cbPrintDXF.TabIndex = 2
         Me.cbPrintDXF.Text = "DXF"
         Me.cbPrintDXF.UseVisualStyleBackColor = True
@@ -58,9 +60,10 @@ Partial Class frmBatchPrint
         Me.cbPrintDWG.AutoSize = True
         Me.cbPrintDWG.Checked = True
         Me.cbPrintDWG.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.cbPrintDWG.Location = New System.Drawing.Point(15, 141)
+        Me.cbPrintDWG.Location = New System.Drawing.Point(11, 115)
+        Me.cbPrintDWG.Margin = New System.Windows.Forms.Padding(2)
         Me.cbPrintDWG.Name = "cbPrintDWG"
-        Me.cbPrintDWG.Size = New System.Drawing.Size(64, 21)
+        Me.cbPrintDWG.Size = New System.Drawing.Size(53, 17)
         Me.cbPrintDWG.TabIndex = 1
         Me.cbPrintDWG.Text = "DWG"
         Me.cbPrintDWG.UseVisualStyleBackColor = True
@@ -70,9 +73,10 @@ Partial Class frmBatchPrint
         Me.cbPrintPDF.AutoSize = True
         Me.cbPrintPDF.Checked = True
         Me.cbPrintPDF.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.cbPrintPDF.Location = New System.Drawing.Point(15, 114)
+        Me.cbPrintPDF.Location = New System.Drawing.Point(11, 93)
+        Me.cbPrintPDF.Margin = New System.Windows.Forms.Padding(2)
         Me.cbPrintPDF.Name = "cbPrintPDF"
-        Me.cbPrintPDF.Size = New System.Drawing.Size(57, 21)
+        Me.cbPrintPDF.Size = New System.Drawing.Size(47, 17)
         Me.cbPrintPDF.TabIndex = 0
         Me.cbPrintPDF.Text = "PDF"
         Me.cbPrintPDF.UseVisualStyleBackColor = True
@@ -80,9 +84,10 @@ Partial Class frmBatchPrint
         'btnCancel
         '
         Me.btnCancel.BackColor = System.Drawing.Color.LightCoral
-        Me.btnCancel.Location = New System.Drawing.Point(636, 161)
+        Me.btnCancel.Location = New System.Drawing.Point(477, 131)
+        Me.btnCancel.Margin = New System.Windows.Forms.Padding(2)
         Me.btnCancel.Name = "btnCancel"
-        Me.btnCancel.Size = New System.Drawing.Size(105, 35)
+        Me.btnCancel.Size = New System.Drawing.Size(79, 28)
         Me.btnCancel.TabIndex = 2
         Me.btnCancel.Text = "Cancel"
         Me.btnCancel.UseVisualStyleBackColor = False
@@ -90,9 +95,10 @@ Partial Class frmBatchPrint
         'btnBatchPrint
         '
         Me.btnBatchPrint.BackColor = System.Drawing.Color.LightGreen
-        Me.btnBatchPrint.Location = New System.Drawing.Point(747, 110)
+        Me.btnBatchPrint.Location = New System.Drawing.Point(560, 89)
+        Me.btnBatchPrint.Margin = New System.Windows.Forms.Padding(2)
         Me.btnBatchPrint.Name = "btnBatchPrint"
-        Me.btnBatchPrint.Size = New System.Drawing.Size(145, 86)
+        Me.btnBatchPrint.Size = New System.Drawing.Size(109, 70)
         Me.btnBatchPrint.TabIndex = 3
         Me.btnBatchPrint.Text = "Print -->"
         Me.btnBatchPrint.UseVisualStyleBackColor = False
@@ -100,9 +106,10 @@ Partial Class frmBatchPrint
         'cbCancel
         '
         Me.cbCancel.AutoSize = True
-        Me.cbCancel.Location = New System.Drawing.Point(530, 175)
+        Me.cbCancel.Location = New System.Drawing.Point(398, 142)
+        Me.cbCancel.Margin = New System.Windows.Forms.Padding(2)
         Me.cbCancel.Name = "cbCancel"
-        Me.cbCancel.Size = New System.Drawing.Size(87, 21)
+        Me.cbCancel.Size = New System.Drawing.Size(70, 17)
         Me.cbCancel.TabIndex = 4
         Me.cbCancel.Text = "canceled"
         Me.cbCancel.UseVisualStyleBackColor = True
@@ -110,9 +117,9 @@ Partial Class frmBatchPrint
         '
         'frmBatchPrint
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(904, 208)
+        Me.ClientSize = New System.Drawing.Size(678, 169)
         Me.Controls.Add(Me.cbCancel)
         Me.Controls.Add(Me.cbPrintDXF)
         Me.Controls.Add(Me.btnBatchPrint)
@@ -121,6 +128,7 @@ Partial Class frmBatchPrint
         Me.Controls.Add(Me.cbPrintPDF)
         Me.Controls.Add(Me.Label1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "frmBatchPrint"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Batch Print?"

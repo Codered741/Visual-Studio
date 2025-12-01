@@ -75,6 +75,11 @@ Partial Class frmBatchChange
         Me.ApprovedDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.cbUpdate = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.BOM = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.NextAssy = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.UsedOn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Show = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.BuildingNo = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ProjectNo = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.tbEpicorMtlDescription = New System.Windows.Forms.TextBox()
         Me.tbEpicorMtlNumber = New System.Windows.Forms.TextBox()
         Me.btnBATCH = New System.Windows.Forms.Button()
@@ -93,6 +98,18 @@ Partial Class frmBatchChange
         Me.tbDescription = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.btnSet4 = New System.Windows.Forms.Button()
+        Me.btnSet3 = New System.Windows.Forms.Button()
+        Me.tbProjectNo = New System.Windows.Forms.TextBox()
+        Me.Label33 = New System.Windows.Forms.Label()
+        Me.tbBuildingNo = New System.Windows.Forms.TextBox()
+        Me.Label32 = New System.Windows.Forms.Label()
+        Me.tbShow = New System.Windows.Forms.TextBox()
+        Me.Label31 = New System.Windows.Forms.Label()
+        Me.Label30 = New System.Windows.Forms.Label()
+        Me.tbUsedOn = New System.Windows.Forms.TextBox()
+        Me.Label29 = New System.Windows.Forms.Label()
+        Me.tbNextAssy = New System.Windows.Forms.TextBox()
         Me.tbApprovedBy = New System.Windows.Forms.TextBox()
         Me.tbDesignedBy = New System.Windows.Forms.TextBox()
         Me.Label27 = New System.Windows.Forms.Label()
@@ -100,6 +117,10 @@ Partial Class frmBatchChange
         Me.tbPartNumber = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.LoadStatus = New System.Windows.Forms.Label()
+        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
+        Me.tbTemplateFilepath = New System.Windows.Forms.TextBox()
+        Me.Label28 = New System.Windows.Forms.Label()
+        Me.btnSetTemplateFilepath = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         CType(Me.dgvBOM, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox2.SuspendLayout()
@@ -319,7 +340,7 @@ Partial Class frmBatchChange
         Me.GroupBox1.Controls.Add(Me.tbRevisionNumber)
         Me.GroupBox1.Controls.Add(Me.cbDesigner)
         Me.GroupBox1.Enabled = False
-        Me.GroupBox1.Location = New System.Drawing.Point(10, 701)
+        Me.GroupBox1.Location = New System.Drawing.Point(414, 127)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(575, 272)
         Me.GroupBox1.TabIndex = 52
@@ -492,14 +513,14 @@ Partial Class frmBatchChange
         Me.dgvBOM.AllowUserToResizeRows = False
         Me.dgvBOM.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
         Me.dgvBOM.ColumnHeadersHeight = 40
-        Me.dgvBOM.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.FileName, Me.PartNumber, Me.Thumbnail, Me.Description, Me.DesignedBy, Me.CreationDate, Me.ApprovedBy, Me.ApprovedDate, Me.cbUpdate, Me.BOM})
-        Me.dgvBOM.Location = New System.Drawing.Point(10, 35)
+        Me.dgvBOM.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.FileName, Me.PartNumber, Me.Thumbnail, Me.Description, Me.DesignedBy, Me.CreationDate, Me.ApprovedBy, Me.ApprovedDate, Me.cbUpdate, Me.BOM, Me.NextAssy, Me.UsedOn, Me.Show, Me.BuildingNo, Me.ProjectNo})
+        Me.dgvBOM.Location = New System.Drawing.Point(10, 57)
         Me.dgvBOM.MultiSelect = False
         Me.dgvBOM.Name = "dgvBOM"
         Me.dgvBOM.RowHeadersVisible = False
         Me.dgvBOM.RowTemplate.Height = 35
         Me.dgvBOM.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
-        Me.dgvBOM.Size = New System.Drawing.Size(1330, 506)
+        Me.dgvBOM.Size = New System.Drawing.Size(1531, 484)
         Me.dgvBOM.TabIndex = 50
         '
         'FileName
@@ -566,6 +587,31 @@ Partial Class frmBatchChange
         Me.BOM.HeaderText = "BOM"
         Me.BOM.Name = "BOM"
         '
+        'NextAssy
+        '
+        Me.NextAssy.HeaderText = "NextAssy"
+        Me.NextAssy.Name = "NextAssy"
+        '
+        'UsedOn
+        '
+        Me.UsedOn.HeaderText = "UsedOn"
+        Me.UsedOn.Name = "UsedOn"
+        '
+        'Show
+        '
+        Me.Show.HeaderText = "Show"
+        Me.Show.Name = "Show"
+        '
+        'BuildingNo
+        '
+        Me.BuildingNo.HeaderText = "BuildingNo"
+        Me.BuildingNo.Name = "BuildingNo"
+        '
+        'ProjectNo
+        '
+        Me.ProjectNo.HeaderText = "ProjectNo"
+        Me.ProjectNo.Name = "ProjectNo"
+        '
         'tbEpicorMtlDescription
         '
         Me.tbEpicorMtlDescription.Location = New System.Drawing.Point(143, 71)
@@ -582,17 +628,19 @@ Partial Class frmBatchChange
         '
         'btnBATCH
         '
-        Me.btnBATCH.Location = New System.Drawing.Point(1074, 547)
+        Me.btnBATCH.BackColor = System.Drawing.Color.MintCream
+        Me.btnBATCH.Location = New System.Drawing.Point(1227, 548)
         Me.btnBATCH.Name = "btnBATCH"
-        Me.btnBATCH.Size = New System.Drawing.Size(266, 87)
+        Me.btnBATCH.Size = New System.Drawing.Size(314, 112)
         Me.btnBATCH.TabIndex = 57
         Me.btnBATCH.Text = "Preform Batch Template and Property Change" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(checked rows)"
-        Me.btnBATCH.UseVisualStyleBackColor = True
+        Me.btnBATCH.UseVisualStyleBackColor = False
         '
         'GroupBox2
         '
         Me.GroupBox2.Controls.Add(Me.Label21)
         Me.GroupBox2.Controls.Add(Me.tbZLength)
+        Me.GroupBox2.Controls.Add(Me.GroupBox1)
         Me.GroupBox2.Controls.Add(Me.Label19)
         Me.GroupBox2.Controls.Add(Me.Label20)
         Me.GroupBox2.Controls.Add(Me.tbYLength)
@@ -737,6 +785,18 @@ Partial Class frmBatchChange
         '
         'GroupBox3
         '
+        Me.GroupBox3.Controls.Add(Me.btnSet4)
+        Me.GroupBox3.Controls.Add(Me.btnSet3)
+        Me.GroupBox3.Controls.Add(Me.tbProjectNo)
+        Me.GroupBox3.Controls.Add(Me.Label33)
+        Me.GroupBox3.Controls.Add(Me.tbBuildingNo)
+        Me.GroupBox3.Controls.Add(Me.Label32)
+        Me.GroupBox3.Controls.Add(Me.tbShow)
+        Me.GroupBox3.Controls.Add(Me.Label31)
+        Me.GroupBox3.Controls.Add(Me.Label30)
+        Me.GroupBox3.Controls.Add(Me.tbUsedOn)
+        Me.GroupBox3.Controls.Add(Me.Label29)
+        Me.GroupBox3.Controls.Add(Me.tbNextAssy)
         Me.GroupBox3.Controls.Add(Me.tbApprovedBy)
         Me.GroupBox3.Controls.Add(Me.tbDesignedBy)
         Me.GroupBox3.Controls.Add(Me.Label27)
@@ -753,10 +813,108 @@ Partial Class frmBatchChange
         Me.GroupBox3.Controls.Add(Me.Label2)
         Me.GroupBox3.Location = New System.Drawing.Point(10, 547)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(575, 148)
+        Me.GroupBox3.Size = New System.Drawing.Size(575, 237)
         Me.GroupBox3.TabIndex = 54
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "BOM Active Item Data"
+        '
+        'btnSet4
+        '
+        Me.btnSet4.Location = New System.Drawing.Point(375, 151)
+        Me.btnSet4.Name = "btnSet4"
+        Me.btnSet4.Size = New System.Drawing.Size(194, 70)
+        Me.btnSet4.TabIndex = 45
+        Me.btnSet4.Text = "Set (checked)"
+        Me.btnSet4.UseVisualStyleBackColor = True
+        '
+        'btnSet3
+        '
+        Me.btnSet3.Location = New System.Drawing.Point(473, 124)
+        Me.btnSet3.Name = "btnSet3"
+        Me.btnSet3.Size = New System.Drawing.Size(96, 21)
+        Me.btnSet3.TabIndex = 44
+        Me.btnSet3.Text = "Set (checked)"
+        Me.btnSet3.UseVisualStyleBackColor = True
+        '
+        'tbProjectNo
+        '
+        Me.tbProjectNo.Location = New System.Drawing.Point(90, 201)
+        Me.tbProjectNo.Name = "tbProjectNo"
+        Me.tbProjectNo.Size = New System.Drawing.Size(279, 20)
+        Me.tbProjectNo.TabIndex = 42
+        '
+        'Label33
+        '
+        Me.Label33.AutoSize = True
+        Me.Label33.Location = New System.Drawing.Point(2, 204)
+        Me.Label33.Name = "Label33"
+        Me.Label33.Size = New System.Drawing.Size(80, 13)
+        Me.Label33.TabIndex = 43
+        Me.Label33.Text = "Project Number"
+        '
+        'tbBuildingNo
+        '
+        Me.tbBuildingNo.Location = New System.Drawing.Point(90, 175)
+        Me.tbBuildingNo.Name = "tbBuildingNo"
+        Me.tbBuildingNo.Size = New System.Drawing.Size(279, 20)
+        Me.tbBuildingNo.TabIndex = 40
+        '
+        'Label32
+        '
+        Me.Label32.AutoSize = True
+        Me.Label32.Location = New System.Drawing.Point(2, 178)
+        Me.Label32.Name = "Label32"
+        Me.Label32.Size = New System.Drawing.Size(84, 13)
+        Me.Label32.TabIndex = 41
+        Me.Label32.Text = "Building Number"
+        '
+        'tbShow
+        '
+        Me.tbShow.Location = New System.Drawing.Point(90, 149)
+        Me.tbShow.Name = "tbShow"
+        Me.tbShow.Size = New System.Drawing.Size(279, 20)
+        Me.tbShow.TabIndex = 38
+        '
+        'Label31
+        '
+        Me.Label31.AutoSize = True
+        Me.Label31.Location = New System.Drawing.Point(2, 152)
+        Me.Label31.Name = "Label31"
+        Me.Label31.Size = New System.Drawing.Size(88, 13)
+        Me.Label31.TabIndex = 39
+        Me.Label31.Text = "Show (Attraction)"
+        '
+        'Label30
+        '
+        Me.Label30.AutoSize = True
+        Me.Label30.Location = New System.Drawing.Point(247, 127)
+        Me.Label30.Name = "Label30"
+        Me.Label30.Size = New System.Drawing.Size(49, 13)
+        Me.Label30.TabIndex = 37
+        Me.Label30.Text = "Used On"
+        '
+        'tbUsedOn
+        '
+        Me.tbUsedOn.Location = New System.Drawing.Point(320, 123)
+        Me.tbUsedOn.Name = "tbUsedOn"
+        Me.tbUsedOn.Size = New System.Drawing.Size(147, 20)
+        Me.tbUsedOn.TabIndex = 36
+        '
+        'Label29
+        '
+        Me.Label29.AutoSize = True
+        Me.Label29.Location = New System.Drawing.Point(2, 127)
+        Me.Label29.Name = "Label29"
+        Me.Label29.Size = New System.Drawing.Size(54, 13)
+        Me.Label29.TabIndex = 35
+        Me.Label29.Text = "Next Assy"
+        '
+        'tbNextAssy
+        '
+        Me.tbNextAssy.Location = New System.Drawing.Point(90, 123)
+        Me.tbNextAssy.Name = "tbNextAssy"
+        Me.tbNextAssy.Size = New System.Drawing.Size(151, 20)
+        Me.tbNextAssy.TabIndex = 34
         '
         'tbApprovedBy
         '
@@ -816,21 +974,55 @@ Partial Class frmBatchChange
         Me.LoadStatus.Text = "LoadStatus"
         Me.LoadStatus.Visible = False
         '
+        'OpenFileDialog1
+        '
+        Me.OpenFileDialog1.FileName = "OpenFileDialog1"
+        '
+        'tbTemplateFilepath
+        '
+        Me.tbTemplateFilepath.Location = New System.Drawing.Point(427, 31)
+        Me.tbTemplateFilepath.Name = "tbTemplateFilepath"
+        Me.tbTemplateFilepath.ReadOnly = True
+        Me.tbTemplateFilepath.Size = New System.Drawing.Size(955, 20)
+        Me.tbTemplateFilepath.TabIndex = 58
+        Me.tbTemplateFilepath.Text = "--"
+        '
+        'Label28
+        '
+        Me.Label28.AutoSize = True
+        Me.Label28.Location = New System.Drawing.Point(237, 34)
+        Me.Label28.Name = "Label28"
+        Me.Label28.Size = New System.Drawing.Size(73, 13)
+        Me.Label28.TabIndex = 59
+        Me.Label28.Text = "Template File:"
+        Me.Label28.Visible = False
+        '
+        'btnSetTemplateFilepath
+        '
+        Me.btnSetTemplateFilepath.Enabled = False
+        Me.btnSetTemplateFilepath.Location = New System.Drawing.Point(329, 29)
+        Me.btnSetTemplateFilepath.Name = "btnSetTemplateFilepath"
+        Me.btnSetTemplateFilepath.Size = New System.Drawing.Size(92, 23)
+        Me.btnSetTemplateFilepath.TabIndex = 60
+        Me.btnSetTemplateFilepath.Text = "Set Template"
+        Me.btnSetTemplateFilepath.UseVisualStyleBackColor = True
+        '
         'frmBatchChange
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1348, 703)
+        Me.ClientSize = New System.Drawing.Size(1553, 792)
+        Me.Controls.Add(Me.btnSetTemplateFilepath)
+        Me.Controls.Add(Me.Label28)
+        Me.Controls.Add(Me.tbTemplateFilepath)
         Me.Controls.Add(Me.btnGetInfo)
         Me.Controls.Add(Me.LoadLabel)
-        Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.dgvBOM)
         Me.Controls.Add(Me.btnBATCH)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.LoadStatus)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.ImeMode = System.Windows.Forms.ImeMode.NoControl
         Me.Name = "frmBatchChange"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Batch Change Interface"
@@ -923,4 +1115,25 @@ Partial Class frmBatchChange
     Friend WithEvents ApprovedDate As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents cbUpdate As Windows.Forms.DataGridViewCheckBoxColumn
     Friend WithEvents BOM As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents NextAssy As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents UsedOn As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents Show As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents BuildingNo As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents ProjectNo As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents OpenFileDialog1 As Windows.Forms.OpenFileDialog
+    Friend WithEvents tbTemplateFilepath As Windows.Forms.TextBox
+    Friend WithEvents Label28 As Windows.Forms.Label
+    Friend WithEvents btnSetTemplateFilepath As Windows.Forms.Button
+    Friend WithEvents btnSet4 As Windows.Forms.Button
+    Friend WithEvents btnSet3 As Windows.Forms.Button
+    Friend WithEvents tbProjectNo As Windows.Forms.TextBox
+    Friend WithEvents Label33 As Windows.Forms.Label
+    Friend WithEvents tbBuildingNo As Windows.Forms.TextBox
+    Friend WithEvents Label32 As Windows.Forms.Label
+    Friend WithEvents tbShow As Windows.Forms.TextBox
+    Friend WithEvents Label31 As Windows.Forms.Label
+    Friend WithEvents Label30 As Windows.Forms.Label
+    Friend WithEvents tbUsedOn As Windows.Forms.TextBox
+    Friend WithEvents Label29 As Windows.Forms.Label
+    Friend WithEvents tbNextAssy As Windows.Forms.TextBox
 End Class

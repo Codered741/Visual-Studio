@@ -1,6 +1,6 @@
 *
 *The list below is formatted in a specific order. If you are adding or removing ELEMENTS please obey the following template so the program can interpret your entries without error.
-*[ELEMENT]|[PROJECT NAME]|[PROJECT/ELEMENT NO.]|[BUILDING NO.]
+*[ELEMENT]|[PROJECT NAME]|[PROJECT/ELEMENT NO.]|[BUILDING NO.][TAIT ELEMENT NO.]
 *Each line represents an element.
 *Notes lines begin with "*" All lines without an asterisk(*) will be read.
 *

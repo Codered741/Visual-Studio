@@ -5,6 +5,7 @@ Imports System.Collections.Generic
 Imports System.IO
 Imports Microsoft.Win32
 Imports Microsoft.VisualBasic
+
 Public Class frmBatchChange
 
     Dim ds As New System.Data.DataSet
@@ -35,16 +36,21 @@ Public Class frmBatchChange
         ds.Tables.Clear()
         ds.Tables.Add("ItemProperties")
 
-        ds.Tables("ItemProperties").Columns.Add("FN")
-        ds.Tables("ItemProperties").Columns.Add("PN")
-        ds.Tables("ItemProperties").Columns.Add("Image")
-        ds.Tables("ItemProperties").Columns.Add("PartDescription")
-        ds.Tables("ItemProperties").Columns.Add("DesignedBy")
-        ds.Tables("ItemProperties").Columns.Add("CreationDate")
-        ds.Tables("ItemProperties").Columns.Add("ApprovedBy")
-        ds.Tables("ItemProperties").Columns.Add("ApprovedDate")
-        ds.Tables("ItemProperties").Columns.Add("Checked")
-        ds.Tables("ItemProperties").Columns.Add("BOMtype")
+        ds.Tables("ItemProperties").Columns.Add("FN") '0
+        ds.Tables("ItemProperties").Columns.Add("PN") '1
+        ds.Tables("ItemProperties").Columns.Add("Image") '2
+        ds.Tables("ItemProperties").Columns.Add("PartDescription") '3
+        ds.Tables("ItemProperties").Columns.Add("DesignedBy") '4
+        ds.Tables("ItemProperties").Columns.Add("CreationDate") '5
+        ds.Tables("ItemProperties").Columns.Add("ApprovedBy") '6
+        ds.Tables("ItemProperties").Columns.Add("ApprovedDate") '7
+        ds.Tables("ItemProperties").Columns.Add("Checked") '8
+        ds.Tables("ItemProperties").Columns.Add("BOMtype") '9
+        ds.Tables("ItemProperties").Columns.Add("NextAssy") '10
+        ds.Tables("ItemProperties").Columns.Add("UsedOn") '11
+        ds.Tables("ItemProperties").Columns.Add("Show") '12
+        ds.Tables("ItemProperties").Columns.Add("BuildingNo") '13
+        ds.Tables("ItemProperties").Columns.Add("ProjectNo") '14
         'ds.Tables("ItemProperties").Columns.Add("RevisionNumber")
         'ds.Tables("ItemProperties").Columns.Add("MakeBuy")
         'ds.Tables("ItemProperties").Columns.Add("MaterialDescription")
@@ -77,6 +83,7 @@ Public Class frmBatchChange
 
         LoadStatus.Text = "Populating Grid View..."
         dgvBOM.Rows.Clear()
+        Dim n As Integer
         For Each row As System.Data.DataRow In ds.Tables("ItemProperties").Rows
             Dim newrow As Integer
             dgvBOM.Rows.Add()
@@ -91,6 +98,12 @@ Public Class frmBatchChange
                 End If
             Next
             dgvBOM.Rows(newrow).Cells.Item(9).Value = row.Item(9)
+            dgvBOM.Rows(newrow).Cells.Item(10).Value = row.Item(10)
+            dgvBOM.Rows(newrow).Cells.Item(11).Value = row.Item(11)
+            dgvBOM.Rows(newrow).Cells.Item(12).Value = row.Item(12)
+            dgvBOM.Rows(newrow).Cells.Item(13).Value = row.Item(13)
+            dgvBOM.Rows(newrow).Cells.Item(14).Value = row.Item(14)
+
         Next
         Threading.Thread.Sleep(500)
 
@@ -210,6 +223,31 @@ Public Class frmBatchChange
                             dr.Item(7) = shortdate2.ToShortDateString                                                   'Record ApprovedDate property to datarow
                         Catch ex As Exception
                             dr.Item(7) = "DNE"
+                        End Try
+                        Try
+                            dr.Item(10) = CustomPropSet.Item("NextAssy").Value.ToString                                  'Record Detailer property to datarow
+                        Catch ex As Exception
+                            dr.Item(10) = "DNE"
+                        End Try
+                        Try
+                            dr.Item(11) = CustomPropSet.Item("UsedOn").Value.ToString                                  'Record Detailer property to datarow
+                        Catch ex As Exception
+                            dr.Item(11) = "DNE"
+                        End Try
+                        Try
+                            dr.Item(12) = CustomPropSet.Item("Show").Value.ToString                                  'Record Detailer property to datarow
+                        Catch ex As Exception
+                            dr.Item(12) = "DNE"
+                        End Try
+                        Try
+                            dr.Item(13) = CustomPropSet.Item("Building Number").Value.ToString                                  'Record Detailer property to datarow
+                        Catch ex As Exception
+                            dr.Item(13) = "DNE"
+                        End Try
+                        Try
+                            dr.Item(14) = CustomPropSet.Item("Project Number").Value.ToString                                  'Record Detailer property to datarow
+                        Catch ex As Exception
+                            dr.Item(14) = "DNE"
                         End Try
                         'Try
                         '    dr.Item(9) = StdPropSet.Item("Designer").Value.ToString                                     'Record Designer property to datarow
@@ -391,6 +429,31 @@ Public Class frmBatchChange
                         Catch ex As Exception
                             dr.Item(7) = "DNE"
                         End Try
+                        Try
+                            dr.Item(10) = CustomPropSet.Item("NextAssy").Value.ToString                                  'Record Detailer property to datarow
+                        Catch ex As Exception
+                            dr.Item(10) = "DNE"
+                        End Try
+                        Try
+                            dr.Item(11) = CustomPropSet.Item("UsedOn").Value.ToString                                  'Record Detailer property to datarow
+                        Catch ex As Exception
+                            dr.Item(11) = "DNE"
+                        End Try
+                        Try
+                            dr.Item(12) = CustomPropSet.Item("Show").Value.ToString                                  'Record Detailer property to datarow
+                        Catch ex As Exception
+                            dr.Item(12) = "DNE"
+                        End Try
+                        Try
+                            dr.Item(13) = CustomPropSet.Item("Building Number").Value.ToString                                  'Record Detailer property to datarow
+                        Catch ex As Exception
+                            dr.Item(13) = "DNE"
+                        End Try
+                        Try
+                            dr.Item(14) = CustomPropSet.Item("Project Number").Value.ToString                                  'Record Detailer property to datarow
+                        Catch ex As Exception
+                            dr.Item(14) = "DNE"
+                        End Try
                         'Try
                         '    dr.Item(9) = StdPropSet.Item("Designer").Value.ToString                                     'Record Designer property to datarow
                         'Catch ex As Exception
@@ -525,6 +588,11 @@ nxtOcc:
             Catch
                 dtpApprovedDate.Value = New Date(2000, 1, 1)
             End Try
+            tbNextAssy.Text = foundRows(i)(10)
+            tbUsedOn.Text = foundRows(i)(11)
+            tbShow.Text = foundRows(i)(12)
+            tbBuildingNo.Text = foundRows(i)(13)
+            tbProjectNo.Text = foundRows(i)(14)
 
             'cbDesigner.Text = foundRows(i)(9)
             'cbDetailer.Text = foundRows(i)(10)
@@ -638,26 +706,89 @@ nxtOcc:
             End If
         Next
     End Sub
+    Private Sub btnSet3_Click(sender As Object, e As EventArgs) Handles btnSet3.Click
+        For Each rw As DataGridViewRow In dgvBOM.Rows
+            Dim cbCELL As DataGridViewCheckBoxCell
+            cbCELL = rw.Cells.Item(8)
+            If cbCELL.Value = True Then
+
+                ' Create an expression to find FN = SelectedRefDoc.
+                Dim expression As String
+                expression = "FN = '" & rw.Cells.Item(0).Value & "'"
+
+                ' Create a result datarow
+                Dim foundRows() As System.Data.DataRow
+
+                ' Use the Select method to find all rows matching the filter.
+                foundRows = ds.Tables("ItemProperties").Select(expression)
+
+                'Change the values for NextAssy and UsedOn in the datatable row
+                foundRows(0)(10) = tbNextAssy.Text
+                foundRows(0)(11) = tbUsedOn.Text
+
+                'Change the values in the DGVrow
+                rw.Cells.Item(10).Value = tbNextAssy.Text
+                rw.Cells.Item(11).Value = tbUsedOn.Text
+            End If
+        Next
+    End Sub
+    Private Sub btnSet4_Click(sender As Object, e As EventArgs) Handles btnSet4.Click
+        For Each rw As DataGridViewRow In dgvBOM.Rows
+            Dim cbCELL As DataGridViewCheckBoxCell
+            cbCELL = rw.Cells.Item(8)
+            If cbCELL.Value = True Then
+
+                ' Create an expression to find FN = SelectedRefDoc.
+                Dim expression As String
+                expression = "FN = '" & rw.Cells.Item(0).Value & "'"
+
+                ' Create a result datarow
+                Dim foundRows() As System.Data.DataRow
+
+                ' Use the Select method to find all rows matching the filter.
+                foundRows = ds.Tables("ItemProperties").Select(expression)
+
+                'Change the values for NextAssy and UsedOn in the datatable row
+                foundRows(0)(12) = tbShow.Text
+                foundRows(0)(13) = tbBuildingNo.Text
+                foundRows(0)(14) = tbProjectNo.Text
+
+                'Change the values in the DGVrow
+                rw.Cells.Item(12).Value = tbShow.Text
+                rw.Cells.Item(13).Value = tbBuildingNo.Text
+                rw.Cells.Item(14).Value = tbProjectNo.Text
+            End If
+        Next
+    End Sub
 
     Private Sub Label24_DoubleClick(sender As Object, e As EventArgs) Handles Label24.DoubleClick
         Dim newdate1 As Date = New Date(2017, 10, 20)
         dtpCreatedDate.Value = newdate1            'Set the shortcut for the Creation date
     End Sub
     Private Sub Label25_DoubleClick(sender As Object, e As EventArgs) Handles Label25.DoubleClick
-        Dim newdate2 As Date = New Date(2018, 3, 20)
+        Dim newdate2 As Date = New Date(2018, 11, 1)
         dtpApprovedDate.Value = newdate2             'Set the shortcut for the Approved date
         tbApprovedBy.Text = "A. YEAGER"
     End Sub
 
     Private Sub btnBATCH_Click(sender As Object, e As EventArgs) Handles btnBATCH.Click
         'get user approval
-        If MessageBox.Show("This will modify the created and approved date properties for each document as well as insert a new template for associated drawing documents." _
-                    & vbLf & "This command expects that the drawing file shares the same name and location as the part/assembly document." _
-                    & vbLf & "Please perform a GET operation from within Vault prior to continuing to ensure you are working with the most up-to-date documents." _
-                    & vbLf & " " _
-                    & vbLf & "Are you sure you want to continue?", "BATCH CHANGE TEMPLATE AND PROPERTIES", MessageBoxButtons.YesNo) = vbNo Then
+        'If MessageBox.Show("This will modify the properties for each document as well as insert a new template for associated drawing documents." _
+        '            & vbLf & "This command expects that the drawing file shares the same name and location as the part/assembly document." _
+        '            & vbLf & "Please perform a GET operation from within Vault prior to continuing to ensure you are working with the most up-to-date drawings and templates." _
+        '            & vbLf & " " _
+        '            & vbLf & "Are you sure you want to continue?", "BATCH CHANGE TEMPLATE AND PROPERTIES", MessageBoxButtons.YesNo) = vbNo Then
+        '    Exit Sub
+        'End If
+        If MessageBox.Show("This will modify the properties for each document." _
+                    & vbLf & "Are you sure you want to continue?", "BATCH CHANGE PROPERTIES", MessageBoxButtons.YesNo) = vbNo Then
             Exit Sub
         End If
+
+        ''chekc for template file path
+        'If tbTemplateFilepath.Text = "--" Then
+        '    MsgBox("Operation Aborted." & vbNewLine & "Please specify a template document using the tool above before performing a batch change.")
+        'End If
 
         For Each rw As DataGridViewRow In dgvBOM.Rows
             Dim cbCELL As DataGridViewCheckBoxCell
@@ -720,79 +851,116 @@ nxtOcc:
                         ApprovedBy.Value = rw.Cells.Item(6).Value.ToString
                         ApprovedDate.Value = CDate(rw.Cells.Item(7).Value.ToString)
 
-                        '2.) Open drawing if it exists in same location as part/assembly file
+                        ' Get the design tracking property set. 
+                        Dim oCustomPropSet As Inventor.PropertySet
+                        oCustomPropSet = oPropSets.Item("Inventor User Defined Properties")
 
-                        idwPathName = oRefDoc.FullDocumentName.Substring(0, Len(oRefDoc.FullDocumentName) - 3) & "dwg"
-                        If (System.IO.File.Exists(idwPathName)) Then
-                            Dim oDrawDoc As DrawingDocument
-                            oDrawDoc = invApp.Documents.OpenWithOptions(idwPathName, oNVM, True)
-                            'drawingname = oRefDoc.DisplayName.Substring(0, Len(oRefDoc.DisplayName) - 3)
+                        ' Get & Set the Next Assy iProperty. 
+                        Dim NextAssy As Inventor.Property
+                        NextAssy = oCustomPropSet.Item("NextAssy")
+                        NextAssy.Value = rw.Cells.Item(10).Value.ToString
 
-                            '3.) Update all sheet title blocks and refresh drawing
+                        ' Get & Set the Used On iProperty. 
+                        Dim UsedOn As Inventor.Property
+                        UsedOn = oCustomPropSet.Item("UsedOn")
+                        UsedOn.Value = rw.Cells.Item(11).Value.ToString
 
-                            Dim oTemplate As DrawingDocument
-                            Dim oSourceCoverSheetBlockDef As TitleBlockDefinition
-                            Dim oSourceMainSheetBlockDef As TitleBlockDefinition
-                            Dim oSource2ndSheetBlockDef As TitleBlockDefinition
-                            Dim oNewCoverSheetBlockDef As TitleBlockDefinition
-                            Dim oNewMainSheetBlockDef As TitleBlockDefinition
-                            Dim oNew2ndSheetBlockDef As TitleBlockDefinition
-                            Dim oSheet As Sheet
+                        ' Get & Set the Next Assy iProperty. 
+                        Dim Show As Inventor.Property
+                        Show = oCustomPropSet.Item("Show")
+                        Show.Value = rw.Cells.Item(12).Value.ToString
 
-                            Fname = "Waterworld Master_Metric.dwg"
-                            oTemplate = invApp.Documents.OpenWithOptions("C:\_vaultWIP\Designs\Templates\Universal\" & Fname, oNVM, False)
-                            oSourceCoverSheetBlockDef = oTemplate.TitleBlockDefinitions.Item("Waterworld Cover Sheet TB")
-                            oSourceMainSheetBlockDef = oTemplate.TitleBlockDefinitions.Item("Waterworld TB")
-                            oSource2ndSheetBlockDef = oTemplate.TitleBlockDefinitions.Item("Waterworld TB SHT2")
+                        ' Get & Set the Next Assy iProperty. 
+                        Dim BuildingNo As Inventor.Property
+                        BuildingNo = oCustomPropSet.Item("Building Number")
+                        BuildingNo.Value = rw.Cells.Item(13).Value.ToString
 
-                            'oNewTitleBlockDef = oSourceTitleBlockDef.CopyTo(oDrawDoc, True)
-                            ' Iterate through the sheets.
-                            For Each oSheet In oDrawDoc.Sheets
-                                oSheet.Activate() 'Activate sheet
-                                If oSheet.TitleBlock.Definition.Name = "Waterworld Cover Sheet TB" Then
-                                    'MsgBox("Hit cover sheet change.")
-                                    Try
-                                        oNewCoverSheetBlockDef = oSourceCoverSheetBlockDef.CopyTo(oDrawDoc, True)
-                                        oSheet.TitleBlock.Delete()
-                                        oSheet.AddTitleBlock(oNewCoverSheetBlockDef)
-                                    Catch ex As Exception
-                                        MsgBox("Error inserting Cover Sheet title block.")
-                                    End Try
+                        ' Get & Set the Next Assy iProperty. 
+                        Dim ProjectNo As Inventor.Property
+                        ProjectNo = oCustomPropSet.Item("Project Number")
+                        ProjectNo.Value = rw.Cells.Item(14).Value.ToString
 
-                                ElseIf oSheet.TitleBlock.Definition.Name = "Waterworld TB" Then
-                                    'MsgBox("Hit main sheet change.")
-                                    Try
-                                        oNewMainSheetBlockDef = oSourceMainSheetBlockDef.CopyTo(oDrawDoc, True)
-                                        oSheet.TitleBlock.Delete()
-                                        oSheet.AddTitleBlock(oNewMainSheetBlockDef)
-                                    Catch ex As Exception
-                                        MsgBox("Error inserting Main Sheet title block.")
-                                    End Try
+                        '                        '2.) Open drawing if it exists in same location as part/assembly file
 
-                                ElseIf oSheet.TitleBlock.Definition.Name = "Waterworld TB SHT2" Then
-                                    'MsgBox("Hit 2nd sheet change.")
-                                    Try
-                                        oNew2ndSheetBlockDef = oSource2ndSheetBlockDef.CopyTo(oDrawDoc, True)
-                                        oSheet.TitleBlock.Delete()
-                                        oSheet.AddTitleBlock(oNew2ndSheetBlockDef)
-                                    Catch ex As Exception
-                                        MsgBox("Error inserting 2nd Sheet title block.")
-                                    End Try
+                        '                        idwPathName = oRefDoc.FullDocumentName.Substring(0, Len(oRefDoc.FullDocumentName) - 3) & "dwg"
+                        '                        If (System.IO.File.Exists(idwPathName)) Then
+                        '                            Dim oDrawDoc As DrawingDocument
+                        '                            oDrawDoc = invApp.Documents.OpenWithOptions(idwPathName, oNVM, True)
+                        '                            'drawingname = oRefDoc.DisplayName.Substring(0, Len(oRefDoc.DisplayName) - 3)
 
-                                Else
-                                    MsgBox("Could not identify existing title block definition for: " & filenameonly & " .")
-                                End If
-                            Next
-                            oTemplate.Close(True)
+                        '                            '3.) Update all sheet title blocks and refresh drawing
 
-                            '4.) Close and Save
-                            oDrawDoc.Close(False)
-                        Else
-                            '2a.) Exit loop if doesn't exist
-                            GoTo NXT
-                        End If
+                        '                            Dim oTemplate As DrawingDocument
+                        '                            Dim oSourceCoverSheetBlockDef As TitleBlockDefinition
+                        '                            Dim oSourceMainSheetBlockDef As TitleBlockDefinition
+                        '                            Dim oSource2ndSheetBlockDef As TitleBlockDefinition
+                        '                            Dim oNewCoverSheetBlockDef As TitleBlockDefinition
+                        '                            Dim oNewMainSheetBlockDef As TitleBlockDefinition
+                        '                            Dim oNew2ndSheetBlockDef As TitleBlockDefinition
+                        '                            Dim oActiveCoverSheetBlockDef As TitleBlockDefinition
+                        '                            Dim oActiveMainSheetBlockDef As TitleBlockDefinition
+                        '                            Dim oActive2ndSheetBlockDef As TitleBlockDefinition
+                        '                            Dim oSheet As Sheet
 
-NXT:
+                        '                            'Fname = "Waterworld Master_Metric.dwg"
+                        '                            'oTemplate = invApp.Documents.OpenWithOptions("C:\_vaultWIP\Designs\Templates\Universal\" & Fname, oNVM, False)
+                        '                            oTemplate = invApp.Documents.OpenWithOptions(tbTemplateFilepath.Text, oNVM, False)
+                        '                            oSourceCoverSheetBlockDef = oTemplate.TitleBlockDefinitions.Item(1)
+                        '                            oSourceMainSheetBlockDef = oTemplate.TitleBlockDefinitions.Item(2)
+                        '                            oSource2ndSheetBlockDef = oTemplate.TitleBlockDefinitions.Item(3)
+
+                        '                            'get the cover, main, and second sheets of active drawing document
+                        '                            oActiveCoverSheetBlockDef = oDrawDoc.TitleBlockDefinitions.Item(1)
+                        '                            oActiveMainSheetBlockDef = oDrawDoc.TitleBlockDefinitions.Item(2)
+                        '                            oActive2ndSheetBlockDef = oDrawDoc.TitleBlockDefinitions.Item(3)
+
+                        '                            ' Iterate through the sheets.
+                        '                            For Each oSheet In oDrawDoc.Sheets
+                        '                                oSheet.Activate() 'Activate sheet
+                        '                                If oSheet.TitleBlock.Definition Is oActiveCoverSheetBlockDef Then ' checks if the active sheet title block IS the first title block in the resource list (if so, it'll be the cover sheet)
+                        '                                    'MsgBox("Hit cover sheet change.")
+                        '                                    Try
+                        '                                        oNewCoverSheetBlockDef = oSourceCoverSheetBlockDef.CopyTo(oDrawDoc, True)
+                        '                                        oSheet.TitleBlock.Delete()
+                        '                                        oSheet.AddTitleBlock(oNewCoverSheetBlockDef)
+                        '                                    Catch ex As Exception
+                        '                                        MsgBox("Error inserting Cover Sheet title block.")
+                        '                                    End Try
+
+                        '                                ElseIf oSheet.TitleBlock.Definition Is oActiveMainSheetBlockDef Then ' checks if the active sheet title block IS the second title block in the resource list (if so, it'll be the main sheet)
+                        '                                    'MsgBox("Hit main sheet change.")
+                        '                                    Try
+                        '                                        oNewMainSheetBlockDef = oSourceMainSheetBlockDef.CopyTo(oDrawDoc, True)
+                        '                                        oSheet.TitleBlock.Delete()
+                        '                                        oSheet.AddTitleBlock(oNewMainSheetBlockDef)
+                        '                                    Catch ex As Exception
+                        '                                        MsgBox("Error inserting Main Sheet title block.")
+                        '                                    End Try
+
+                        '                                ElseIf oSheet.TitleBlock.Definition.Name Is oActive2ndSheetBlockDef Then ' checks if the active sheet title block IS the third title block in the resource list (if so, it'll be the 2nd sheet)
+                        '                                    'MsgBox("Hit 2nd sheet change.")
+                        '                                    Try
+                        '                                        oNew2ndSheetBlockDef = oSource2ndSheetBlockDef.CopyTo(oDrawDoc, True)
+                        '                                        oSheet.TitleBlock.Delete()
+                        '                                        oSheet.AddTitleBlock(oNew2ndSheetBlockDef)
+                        '                                    Catch ex As Exception
+                        '                                        MsgBox("Error inserting 2nd Sheet title block.")
+                        '                                    End Try
+
+                        '                                Else
+                        '                                    MsgBox("Could not identify existing title block definition for: " & filenameonly & " .")
+                        '                                End If
+                        '                            Next
+                        '                            oTemplate.Close(True)
+
+                        '                            '4.) Close and Save
+                        '                            oDrawDoc.Close(False)
+                        '                        Else
+                        '                            '2a.) Exit loop if doesn't exist
+                        '                            GoTo NXT
+                        '                        End If
+
+                        'NXT:
                     End If
 
                 Next
@@ -801,6 +969,26 @@ NXT:
                 'VaultAddin.Activate()
             End If
         Next
-        MsgBox("DONE BATCH PROCESS")
+                MsgBox("DONE BATCH PROCESS")
+    End Sub
+
+    Private Sub btnSetTemplateFilepath_Click(sender As Object, e As EventArgs) Handles btnSetTemplateFilepath.Click
+        Dim fd As Windows.Forms.OpenFileDialog = New Windows.Forms.OpenFileDialog()
+        Dim strFileName As String = "--"
+
+        fd.Title = "Select Template File Dialogue"
+        fd.InitialDirectory = "C:\_vaultWIP\Designs\Templates"
+        fd.Filter = "All files (*.*)|*.*|All files (*.*)|*.*"
+        fd.FilterIndex = 2
+        fd.RestoreDirectory = True
+
+        If fd.ShowDialog() = DialogResult.OK Then
+            strFileName = fd.FileName
+        Else
+            tbTemplateFilepath.Text = "--"
+        End If
+
+        tbTemplateFilepath.Text = strFileName
+
     End Sub
 End Class
